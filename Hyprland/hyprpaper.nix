@@ -1,5 +1,9 @@
 # Hyprpaper - Wallpaper manager configuration
-{ flakeDir, ... }:
+{ config, ... }:
+
+let
+  flakeDir = "${config.home.homeDirectory}/NixOS";
+in
 
 {
   services.hyprpaper = {

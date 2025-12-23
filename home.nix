@@ -3,9 +3,12 @@
   pkgs,
   pkgs-unstable,
   inputs,
-  flakeDir,
   ...
 }:
+
+let
+  flakeDir = "${config.home.homeDirectory}/NixOS";
+in
 
 {
   imports = [

@@ -1,5 +1,9 @@
 # Hyprland keybindings configuration
-{ flakeDir, ... }:
+{ config, ... }:
+
+let
+  flakeDir = "${config.home.homeDirectory}/NixOS";
+in
 
 {
   wayland.windowManager.hyprland.settings = {

@@ -60,8 +60,6 @@
     let
       system = "x86_64-linux";
 
-      # Automatically detect flake directory (works with local checkout)
-      flakeDir = builtins.toString ./.;
 
       # Unstable pkgs for home-manager / desktop / dev
       pkgs-unstable = import nixpkgs-unstable {
@@ -87,7 +85,7 @@
               useGlobalPkgs = false;
               useUserPackages = true;
               extraSpecialArgs = {
-                inherit inputs pkgs-unstable flakeDir;
+                inherit inputs pkgs-unstable;
               };
               users.lebowski = import ./home.nix;
               backupFileExtension = "backup";

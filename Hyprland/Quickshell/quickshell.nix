@@ -1,11 +1,10 @@
-{ config, pkgs-unstable, flakeDir, ... }:
+{ config, pkgs-unstable, ... }:
 
 let
   colors = config.lib.stylix.colors.withHashtag;
   fonts = config.stylix.fonts;
-  quickshellDir = "${flakeDir}/Hyprland/Quickshell";
-  # Relative path from home directory (for home.file)
-  quickshellRelDir = builtins.replaceStrings [ "${config.home.homeDirectory}/" ] [ "" ] quickshellDir;
+  # Path relative to home directory
+  quickshellPath = "NixOS/Hyprland/Quickshell";
 
   # Theme.qml content generated from Stylix colors
   themeQml = ''
@@ -71,11 +70,11 @@ in
     ];
   };
   # Symlink ~/.config/quickshell -> source for live editing
-  xdg.configFile."quickshell".source = config.lib.file.mkOutOfStoreSymlink quickshellDir;
+  xdg.configFile."quickshell".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/${quickshellPath}";
 
   # Generate Theme.qml in each widget's source folder
   home.file = {
-    "${quickshellRelDir}/bar/Theme.qml".text = themeQml;
-    "${quickshellRelDir}/control-center/Theme.qml".text = themeQml;
+    "${quickshellPath}/bar/Theme.qml".text = themeQml;
+    "${quickshellPath}/control-center/Theme.qml".text = themeQml;
   };
 }
