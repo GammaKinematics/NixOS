@@ -1,0 +1,26 @@
+{
+  "saver": {
+    "stapm": 15000,
+    "fast": 18000,
+    "slow": 16000,
+    "temp": 85
+  },
+  "balanced": {
+    "stapm": 25000,
+    "fast": 32000,
+    "slow": 28000,
+    "temp": 95
+  },
+  "performance": {
+    "stapm": 35000,
+    "fast": 45000,
+    "slow": 40000,
+    "temp": 100
+  },
+  "compile": {
+    "stapm": 45000,
+    "fast": 55000,
+    "slow": 50000,
+    "temp": 100
+  }
+}
