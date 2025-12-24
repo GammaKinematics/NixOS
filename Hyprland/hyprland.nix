@@ -49,6 +49,10 @@
     hyprpolkitagent # Polkit authentication agent
     inputs.hyprshutdown.packages.x86_64-linux.default # Graceful shutdown
 
+    # Image / PDF viewers
+    kdePackages.gwenview
+    kdePackages.okular
+
     # File browser
     nautilus
 
@@ -66,10 +70,6 @@
     # Network management
     networkmanagerapplet # nm-applet for WiFi GUI
 
-    # Clipboard management
-    cliphist # Clipboard history manager
-    wl-clipboard # wl-copy and wl-paste utilities
-
     # KiCad script dependencies
     xdotool # Keypress simulation (XWayland)
   ];
@@ -82,10 +82,6 @@
       # NetworkManager applet for WiFi
       "nm-applet --indicator"
 
-      # Clipboard history daemon
-      "wl-paste --type text --watch cliphist store"
-      "wl-paste --type image --watch cliphist store"
-
       # Auto-rotate for tablet mode (iio-sensor-proxy)
       "iio-hyprland"
 
@@ -93,4 +89,29 @@
       "hyprland-monitor-attached"
     ];
   };
+
+  # Screenshot annotation tool
+  programs.swappy = {
+    enable = true;
+    package = pkgs-unstable.swappy;
+    settings.Default = {
+      save_dir = "$HOME/Pictures/Screenshots";
+      save_filename_format = "%F_%T.png";
+      early_exit = true;
+    };
+  };
+
+  # Clipboard history manager
+  services.cliphist = {
+    enable = true;
+    package = pkgs-unstable.cliphist;
+    allowImages = true;
+  };
+
+  # Auto-start Hyprland on tty1
+  programs.bash.profileExtra = ''
+    if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
+      exec Hyprland
+    fi
+  '';
 }

@@ -88,9 +88,10 @@ in
       # Clipboard history (SUPER+V)
       "$mod SHIFT, V, exec, cliphist list | walker --dmenu | cliphist decode | wl-copy"
 
-      # Screenshot bindings
-      ", Print, exec, grimblast --notify copy area"
-      "SHIFT, Print, exec, grimblast --notify copy output"
+      # Screenshot bindings (saves to ~/Pictures/Screenshots/)
+      ", Print, exec, mkdir -p ~/Pictures/Screenshots && grimblast --notify copysave area ~/Pictures/Screenshots/$(date +%F_%T).png"
+      "SHIFT, Print, exec, mkdir -p ~/Pictures/Screenshots && grimblast --notify copysave output ~/Pictures/Screenshots/$(date +%F_%T).png"
+      "CTRL, Print, exec, grimblast --notify save area - | swappy -f -"
 
       # Control center (quickshell)
       "$mod, X, exec, quickshell -c control-center"

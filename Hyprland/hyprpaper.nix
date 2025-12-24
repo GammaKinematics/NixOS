@@ -1,5 +1,5 @@
 # Hyprpaper - Wallpaper manager configuration
-{ config, ... }:
+{ config, pkgs-unstable, ... }:
 
 let
   flakeDir = "${config.home.homeDirectory}/NixOS";
@@ -8,6 +8,7 @@ in
 {
   services.hyprpaper = {
     enable = true;
+    package = pkgs-unstable.hyprpaper;
     settings = {
       ipc = "on";
       splash = false;

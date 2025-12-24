@@ -1,9 +1,10 @@
 # Hypridle - Idle daemon configuration
-{ ... }:
+{ pkgs-unstable, ... }:
 
 {
   services.hypridle = {
     enable = true;
+    package = pkgs-unstable.hypridle;
     settings = {
       general = {
         lock_cmd = "pidof hyprlock || hyprlock";

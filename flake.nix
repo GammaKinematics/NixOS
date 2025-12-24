@@ -21,17 +21,6 @@
       inputs.home-manager.follows = "home-manager";
     };
 
-    # Walker - application launcher
-    elephant = {
-      url = "github:abenz1267/elephant";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
-    walker = {
-      url = "github:abenz1267/walker";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-      inputs.elephant.follows = "elephant";
-    };
-
     # Hardware-specific optimizations (fork with Minisforum V3 SE support)
     nixos-hardware.url = "github:GammaKinematics/nixos-hardware";
 
