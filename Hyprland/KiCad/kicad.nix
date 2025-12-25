@@ -10,5 +10,8 @@ in
     (pkgs.writeShellScriptBin "kicad-cycle" (builtins.readFile "${scriptsDir}/kicad-cycle.sh"))
     (pkgs.writeShellScriptBin "kicad-lib-launch" (builtins.readFile "${scriptsDir}/kicad-lib-launch.sh"))
     (pkgs.writeShellScriptBin "kicad-swap" (builtins.readFile "${scriptsDir}/kicad-swap.sh"))
+
+    # Keypress simulation for KiCad scripts (XWayland)
+    pkgs.xdotool
   ];
 }

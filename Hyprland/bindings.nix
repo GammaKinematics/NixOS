@@ -32,7 +32,6 @@
       "$mod, M, workspace, 90"
 
       "$mod, Escape, exec, hyprlock"
-      "$mod, C, exec, hyprpicker -a" # Color picker to clipboard
 
       # Switch to KiCad workspaces (both monitors)
       "$mod, K, workspace, 101"

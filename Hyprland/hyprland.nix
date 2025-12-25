@@ -1,10 +1,7 @@
 # Hyprland configuration entry point
 # High-level settings: enable, package, imports, and ecosystem packages
 {
-  config,
-  lib,
   pkgs-unstable,
-  inputs,
   ...
 }:
 
@@ -44,12 +41,6 @@
   # Hyprland ecosystem packages
   # ============================================================================
   home.packages = with pkgs-unstable; [
-    # Hyprland ecosystem
-    hyprpicker # Color picker
-    hyprsunset # Blue light filter
-    hyprpolkitagent # Polkit authentication agent
-    inputs.hyprshutdown.packages.x86_64-linux.default # Graceful shutdown
-
     # Image / PDF viewers
     kdePackages.gwenview
     kdePackages.okular
@@ -68,22 +59,10 @@
     # Monitor management
     nwg-displays # GUI for monitor configuration
     hyprland-monitor-attached # Run scripts on monitor hotplug
-
-    # Network management
-    networkmanagerapplet # nm-applet for WiFi GUI
-
-    # KiCad script dependencies
-    xdotool # Keypress simulation (XWayland)
   ];
 
   wayland.windowManager.hyprland.settings = {
     exec-once = [
-      "hyprsunset"
-      "hyprpolkitagent"
-
-      # NetworkManager applet for WiFi
-      "nm-applet --indicator"
-
       # Auto-rotate for tablet mode (iio-sensor-proxy)
       "iio-hyprland"
 
@@ -108,6 +87,18 @@
     enable = true;
     package = pkgs-unstable.cliphist;
     allowImages = true;
+  };
+
+  # Polkit authentication agent (for privilege escalation dialogs)
+  services.hyprpolkitagent = {
+    enable = true;
+    package = pkgs-unstable.hyprpolkitagent;
+  };
+
+  # Blue light filter
+  services.hyprsunset = {
+    enable = true;
+    package = pkgs-unstable.hyprsunset;
   };
 
   # Auto-start Hyprland on tty1

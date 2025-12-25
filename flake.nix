@@ -24,12 +24,6 @@
     # Hardware-specific optimizations (fork with Minisforum V3 SE support)
     nixos-hardware.url = "github:GammaKinematics/nixos-hardware";
 
-    # Hyprshutdown - graceful shutdown for Hyprland
-    hyprshutdown = {
-      url = "github:hyprwm/hyprshutdown";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
-
     # Stylix - system-wide theming
     stylix = {
       url = "github:nix-community/stylix";

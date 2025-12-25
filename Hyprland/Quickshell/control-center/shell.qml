@@ -529,9 +529,9 @@ ShellRoot {
 
                         Repeater {
                             model: [
-                                { icon: "󰐥", tooltip: "Shutdown", cmd: ["hyprshutdown", "-t", "Shutting down...", "--post-cmd", "shutdown -P 0"], accent: Theme.red },
-                                { icon: "󰜉", tooltip: "Reboot", cmd: ["hyprshutdown", "-t", "Restarting...", "--post-cmd", "reboot"], accent: Theme.yellow },
-                                { icon: "󰍃", tooltip: "Logout", cmd: ["hyprshutdown", "-t", "Logging out..."], accent: Theme.blue },
+                                { icon: "󰐥", tooltip: "Shutdown", cmd: ["systemctl", "poweroff"], accent: Theme.red },
+                                { icon: "󰜉", tooltip: "Reboot", cmd: ["systemctl", "reboot"], accent: Theme.yellow },
+                                { icon: "󰍃", tooltip: "Logout", cmd: ["hyprctl", "dispatch", "exit"], accent: Theme.blue },
                                 { icon: "󰌾", tooltip: "Lock", cmd: ["hyprlock"], accent: Theme.green }
                             ]
 

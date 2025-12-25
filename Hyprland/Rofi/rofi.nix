@@ -25,7 +25,6 @@ in
     plugins = with pkgs-unstable; [
       rofi-calc # rofi -show calc
       rofi-emoji # rofi -show emoji
-      rofi-file-browser # rofi -show file-browser
     ];
 
     # Modes available in sidebar tabs
