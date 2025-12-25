@@ -10,26 +10,51 @@ in
     # Variables
     "$mod" = "SUPER";
     "$terminal" = "foot";
-    "$menu" = "walker";
     "$browser" = "zen";
 
     # Keybindings
     bind = [
-      # Applications
-      "$mod, Z, exec, $terminal"
-      "$mod, D, exec, $menu"
-      "$mod, B, exec, $browser"
+      # Rofi
+      "$mod, Space, exec, rofi -show drun"
+      "$mod ALT, Space, exec, rofi-websearch"
+
+      # Foot terminal - go to workspace 50, launch if not running
+      "$mod, A, exec, hyprctl dispatch workspace 50; hyprctl clients -j | grep -q foot || $terminal"
+
+      # Zed - go to workspace 60, launch if not running
+      "$mod, Z, exec, hyprctl dispatch workspace 60; hyprctl clients -j | grep -q dev.zed.Zed || zeditor"
+
+      # Zen Browser - workspace 70 (DP-3), launch if no browser on that workspace
+      "$mod, B, exec, hyprctl dispatch workspace 70; hyprctl clients -j | jq -e '.[] | select(.class == \"zen-twilight\" and .workspace.id == 70)' > /dev/null || hyprctl dispatch exec [workspace 70 silent] -- $browser"
+      # Zen Browser - workspace 71 (eDP-1), launch new window if no browser on that workspace
+      "$mod ALT, B, exec, hyprctl dispatch workspace 71; hyprctl clients -j | jq -e '.[] | select(.class == \"zen-twilight\" and .workspace.id == 71)' > /dev/null || hyprctl dispatch exec [workspace 71 silent] -- $browser --new-window"
+
+      # Nautilus - go to workspace 80, launch if not running
+      "$mod, N, exec, hyprctl dispatch workspace 80; hyprctl clients -j | grep -q org.gnome.Nautilus || nautilus"
+
+      # Haruna - go to workspace 90
+      "$mod, M, workspace, 90"
+
       "$mod, Escape, exec, hyprlock"
       "$mod, C, exec, hyprpicker -a" # Color picker to clipboard
-      "$mod CTRL, K, exec, ${flakeDir}/KiCad-Scripts/kicad-launch.sh" # Launch KiCad
-      "$mod, K, workspace, 101" # Switch to KiCad workspaces (both monitors)
+
+      # Switch to KiCad workspaces (both monitors)
+      "$mod, K, workspace, 101"
       "$mod, K, workspace, 102"
-      "$mod SHIFT, K, togglespecialworkspace, kicad-pm"
-      "$mod ALT, K, exec, ${flakeDir}/KiCad-Scripts/kicad-swap.sh" # Swap SCH/PCB positions
+      # Launch KiCad
+      "$mod CTRL, K, exec, ${flakeDir}/KiCad-Scripts/kicad-launch.sh"
+      # Launch library editors
       "$mod, I, exec, ${flakeDir}/KiCad-Scripts/kicad-lib-launch.sh"
+      # Show project manager
+      "$mod SHIFT, K, togglespecialworkspace, kicad-pm"
+      # Swap SCH/PCB positions
+      "$mod ALT, K, exec, ${flakeDir}/KiCad-Scripts/kicad-swap.sh"
+      # Cycle through project instances
       "$mod, bracketright, exec, ${flakeDir}/KiCad-Scripts/kicad-cycle.sh f" # Cycle KiCad projects forward
       "$mod, bracketleft, exec, ${flakeDir}/KiCad-Scripts/kicad-cycle.sh b" # Cycle KiCad projects backward
-      "$mod, F, exec, env QT_QPA_PLATFORM=xcb FreeCAD --single-instance"
+
+      # FreeCAD - go to workspace 110, launch if not running
+      "$mod, F, exec, hyprctl dispatch workspace 110; hyprctl clients -j | grep -q org.freecad.FreeCAD || env QT_QPA_PLATFORM=xcb FreeCAD --single-instance"
 
       # Window management
       "$mod, Q, killactive"
@@ -85,8 +110,8 @@ in
       "$mod CTRL SHIFT, up, movetoworkspace, m-1"
       "$mod CTRL SHIFT, down, movetoworkspace, m+1"
 
-      # Clipboard history (SUPER+V)
-      "$mod SHIFT, V, exec, cliphist list | walker --dmenu | cliphist decode | wl-copy"
+      # Clipboard history (SUPER+SHIFT+V)
+      "$mod SHIFT, V, exec, cliphist list | rofi -dmenu -p 'Clipboard' | cliphist decode | wl-copy"
 
       # Screenshot bindings (saves to ~/Pictures/Screenshots/)
       ", Print, exec, mkdir -p ~/Pictures/Screenshots && grimblast --notify copysave area ~/Pictures/Screenshots/$(date +%F_%T).png"

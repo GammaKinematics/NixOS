@@ -18,7 +18,7 @@
     ./hypridle.nix
     ./hyprpaper.nix
     ./mako.nix
-    ./walker.nix
+    ./Rofi/rofi.nix
     ./Quickshell/quickshell.nix
   ];
 
@@ -55,6 +55,7 @@
 
     # File browser
     nautilus
+    ffmpegthumbnailer # Video thumbnails for Nautilus
 
     # Screenshot tools
     grimblast # Screenshot utility for Hyprland

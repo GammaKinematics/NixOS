@@ -698,6 +698,16 @@ ShellRoot {
                             y: volumeSlider.topPadding + volumeSlider.availableHeight / 2 - height / 2
                             width: 14; height: 14; radius: 7; color: Theme.text
                         }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onWheel: wheel => {
+                                let delta = wheel.angleDelta.y > 0 ? 5 : -5
+                                let newVal = Math.max(0, Math.min(100, volumeSlider.value + delta))
+                                volumeSlider.value = newVal
+                                if (soundTab.sinkReady) soundTab.currentSink.audio.volume = newVal / 100
+                            }
+                        }
                     }
                 }
             }
@@ -829,6 +839,16 @@ ShellRoot {
                             x: micSlider.leftPadding + micSlider.visualPosition * (micSlider.availableWidth - width)
                             y: micSlider.topPadding + micSlider.availableHeight / 2 - height / 2
                             width: 14; height: 14; radius: 7; color: Theme.text
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onWheel: wheel => {
+                                let delta = wheel.angleDelta.y > 0 ? 5 : -5
+                                let newVal = Math.max(0, Math.min(100, micSlider.value + delta))
+                                micSlider.value = newVal
+                                if (soundTab.sourceReady) soundTab.currentSource.audio.volume = newVal / 100
+                            }
                         }
                     }
                 }
@@ -1210,6 +1230,25 @@ ShellRoot {
                                     radius: 7
                                     color: Theme.text
                                 }
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onWheel: wheel => {
+                                        let delta = wheel.angleDelta.y > 0 ? 5 : -5
+                                        let newVal = Math.max(5, Math.min(100, monitorSlider.value + delta))
+                                        monitorSlider.value = newVal
+                                        model.brightness = Math.round(newVal)
+                                        if (model.isInternal) {
+                                            brightnessSetProc.command = ["brightnessctl", "set", Math.round(newVal) + "%"]
+                                        } else {
+                                            let outputPath = "/outputs/" + model.name.replace(/-/g, "_")
+                                            let brightnessValue = (newVal / 100).toFixed(2)
+                                            brightnessSetProc.command = ["busctl", "--user", "set-property",
+                                                "rs.wl-gammarelay", outputPath, "rs.wl.gammarelay", "Brightness", "d", brightnessValue]
+                                        }
+                                        brightnessSetProc.running = true
+                                    }
+                                }
                             }
                         }
 
@@ -1338,6 +1377,16 @@ ShellRoot {
                             height: 14
                             radius: 7
                             color: Theme.text
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onWheel: wheel => {
+                                let delta = wheel.angleDelta.y > 0 ? 100 : -100
+                                nightLightTemp = Math.max(2500, Math.min(6500, nightLightTemp + delta))
+                                nightLightSlider.value = nightLightTemp
+                                if (nightLightEnabled) nightLightOnProc.running = true
+                            }
                         }
                     }
 
@@ -2205,6 +2254,14 @@ ShellRoot {
                 height: 14
                 radius: 7
                 color: Theme.text
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onWheel: wheel => {
+                    let delta = wheel.angleDelta.y > 0 ? tuningSliderRoot.stepSize : -tuningSliderRoot.stepSize
+                    tuningSliderRoot.value = Math.max(tuningSliderRoot.minVal, Math.min(tuningSliderRoot.maxVal, tuningSliderRoot.value + delta))
+                }
             }
         }
     }

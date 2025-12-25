@@ -104,9 +104,7 @@ ShellRoot {
                 spacing: 2
 
                 Repeater {
-                    model: Hyprland.workspaces.values.filter(ws =>
-                        ws.monitor?.name === modelData.name
-                    ).sort((a, b) => a.id - b.id)
+                    model: workspacePanel.monitorWorkspaces
 
                     Item {
                         id: wsItem
@@ -138,9 +136,9 @@ ShellRoot {
                             bottomRightRadius: workspacePanel.isSideMonitor ? root.cornerRadius : 0
                         }
 
-                        // KiCad logo for workspaces in 100 range
+                        // KiCad logo for workspaces 101-109
                         Image {
-                            visible: wsItem.wsId >= 100 && wsItem.wsId < 200
+                            visible: wsItem.wsId >= 101 && wsItem.wsId < 110
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.right: workspacePanel.isSideMonitor ? undefined : parent.right
                             anchors.left: workspacePanel.isSideMonitor ? parent.left : undefined
@@ -156,9 +154,114 @@ ShellRoot {
                             Behavior on anchors.leftMargin { NumberAnimation { duration: 100 } }
                         }
 
+                        // FreeCAD logo for workspace 110
+                        Image {
+                            visible: wsItem.wsId === 110
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.right: workspacePanel.isSideMonitor ? undefined : parent.right
+                            anchors.left: workspacePanel.isSideMonitor ? parent.left : undefined
+                            anchors.rightMargin: workspacePanel.isSideMonitor ? 0 : (wsItem.isActive ? root.accentPadding : root.basePadding)
+                            anchors.leftMargin: workspacePanel.isSideMonitor ? (wsItem.isActive ? root.accentPadding : root.basePadding) : 0
+                            source: "FreeCAD.svg"
+                            width: wsItem.isActive ? 14 : 11
+                            height: width
+                            fillMode: Image.PreserveAspectFit
+
+                            Behavior on width { NumberAnimation { duration: 100 } }
+                            Behavior on anchors.rightMargin { NumberAnimation { duration: 100 } }
+                            Behavior on anchors.leftMargin { NumberAnimation { duration: 100 } }
+                        }
+
+                        // Terminal icon for workspace 50
+                        Text {
+                            visible: wsItem.wsId === 50
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.right: workspacePanel.isSideMonitor ? undefined : parent.right
+                            anchors.left: workspacePanel.isSideMonitor ? parent.left : undefined
+                            anchors.rightMargin: workspacePanel.isSideMonitor ? 0 : (wsItem.isActive ? root.accentPadding : root.basePadding)
+                            anchors.leftMargin: workspacePanel.isSideMonitor ? (wsItem.isActive ? root.accentPadding : root.basePadding) : 0
+                            text: ">_"
+                            color: wsItem.isActive ? Theme.blue : Theme.text
+                            font.family: Theme.fontFamily
+                            font.pixelSize: wsItem.isActive ? 12 : 9
+                            font.bold: true
+
+                            Behavior on font.pixelSize { NumberAnimation { duration: 100 } }
+                            Behavior on anchors.rightMargin { NumberAnimation { duration: 100 } }
+                            Behavior on anchors.leftMargin { NumberAnimation { duration: 100 } }
+                        }
+
+                        // Zed icon for workspace 60
+                        Image {
+                            visible: wsItem.wsId === 60
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.right: workspacePanel.isSideMonitor ? undefined : parent.right
+                            anchors.left: workspacePanel.isSideMonitor ? parent.left : undefined
+                            anchors.rightMargin: workspacePanel.isSideMonitor ? 0 : (wsItem.isActive ? root.accentPadding : root.basePadding)
+                            anchors.leftMargin: workspacePanel.isSideMonitor ? (wsItem.isActive ? root.accentPadding : root.basePadding) : 0
+                            source: "Zed.png"
+                            width: wsItem.isActive ? 14 : 11
+                            height: width
+                            fillMode: Image.PreserveAspectFit
+
+                            Behavior on width { NumberAnimation { duration: 100 } }
+                            Behavior on anchors.rightMargin { NumberAnimation { duration: 100 } }
+                            Behavior on anchors.leftMargin { NumberAnimation { duration: 100 } }
+                        }
+
+                        // Zen Browser logo for workspaces 70-71
+                        Image {
+                            visible: wsItem.wsId === 70 || wsItem.wsId === 71
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.right: workspacePanel.isSideMonitor ? undefined : parent.right
+                            anchors.left: workspacePanel.isSideMonitor ? parent.left : undefined
+                            anchors.rightMargin: workspacePanel.isSideMonitor ? 0 : (wsItem.isActive ? root.accentPadding : root.basePadding)
+                            anchors.leftMargin: workspacePanel.isSideMonitor ? (wsItem.isActive ? root.accentPadding : root.basePadding) : 0
+                            source: "Zen.svg"
+                            width: wsItem.isActive ? 14 : 11
+                            height: width
+                            fillMode: Image.PreserveAspectFit
+
+                            Behavior on width { NumberAnimation { duration: 100 } }
+                            Behavior on anchors.rightMargin { NumberAnimation { duration: 100 } }
+                            Behavior on anchors.leftMargin { NumberAnimation { duration: 100 } }
+                        }
+
+                        // Files icon for workspace 80
+                        Text {
+                            visible: wsItem.wsId === 80
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.right: workspacePanel.isSideMonitor ? undefined : parent.right
+                            anchors.left: workspacePanel.isSideMonitor ? parent.left : undefined
+                            anchors.rightMargin: workspacePanel.isSideMonitor ? 0 : (wsItem.isActive ? root.accentPadding : root.basePadding)
+                            anchors.leftMargin: workspacePanel.isSideMonitor ? (wsItem.isActive ? root.accentPadding : root.basePadding) : 0
+                            text: "📁"
+                            font.pixelSize: wsItem.isActive ? 14 : 11
+
+                            Behavior on font.pixelSize { NumberAnimation { duration: 100 } }
+                            Behavior on anchors.rightMargin { NumberAnimation { duration: 100 } }
+                            Behavior on anchors.leftMargin { NumberAnimation { duration: 100 } }
+                        }
+
+                        // Video icon for workspace 90
+                        Text {
+                            visible: wsItem.wsId === 90
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.right: workspacePanel.isSideMonitor ? undefined : parent.right
+                            anchors.left: workspacePanel.isSideMonitor ? parent.left : undefined
+                            anchors.rightMargin: workspacePanel.isSideMonitor ? 0 : (wsItem.isActive ? root.accentPadding : root.basePadding)
+                            anchors.leftMargin: workspacePanel.isSideMonitor ? (wsItem.isActive ? root.accentPadding : root.basePadding) : 0
+                            text: "🎬"
+                            font.pixelSize: wsItem.isActive ? 14 : 11
+
+                            Behavior on font.pixelSize { NumberAnimation { duration: 100 } }
+                            Behavior on anchors.rightMargin { NumberAnimation { duration: 100 } }
+                            Behavior on anchors.leftMargin { NumberAnimation { duration: 100 } }
+                        }
+
                         // Number for regular workspaces
                         Text {
-                            visible: wsItem.wsId < 100 || wsItem.wsId >= 200
+                            visible: wsItem.wsId < 20
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.right: workspacePanel.isSideMonitor ? undefined : parent.right
                             anchors.left: workspacePanel.isSideMonitor ? parent.left : undefined
