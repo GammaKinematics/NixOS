@@ -19,6 +19,7 @@
     ./hyprpaper.nix
     ./mako.nix
     ./Rofi/rofi.nix
+    ./KiCad/kicad.nix
     ./Quickshell/quickshell.nix
   ];
 

@@ -26,9 +26,6 @@
       "workspace 90 silent, class:^(org.kde.haruna)$"
       "group set, class:^(org.kde.haruna)$"
 
-      # KiCad window management (regex must fully match since v0.46.0)
-      # Project Manager - script handles moving to scratchpad after editors open
-
       # Schematic/Symbol Editor → workspace 102 (eDP-1), maximized, grouped
       "workspace 102 silent, class:^(KiCad|kicad)$, title:.*Schematic Editor.*"
       "maximize, class:^(KiCad|kicad)$, title:.*Schematic Editor.*"

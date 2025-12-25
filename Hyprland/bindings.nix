@@ -1,9 +1,5 @@
 # Hyprland keybindings configuration
-{ config, ... }:
-
-let
-  flakeDir = "${config.home.homeDirectory}/NixOS";
-in
+{ ... }:
 
 {
   wayland.windowManager.hyprland.settings = {
@@ -41,17 +37,17 @@ in
       # Switch to KiCad workspaces (both monitors)
       "$mod, K, workspace, 101"
       "$mod, K, workspace, 102"
-      # Launch KiCad
-      "$mod CTRL, K, exec, ${flakeDir}/KiCad-Scripts/kicad-launch.sh"
+      # Launch KiCad project selector
+      "$mod CTRL, K, exec, kicad-projects"
       # Launch library editors
-      "$mod, I, exec, ${flakeDir}/KiCad-Scripts/kicad-lib-launch.sh"
+      "$mod, L, exec, kicad-lib-launch"
       # Show project manager
       "$mod SHIFT, K, togglespecialworkspace, kicad-pm"
       # Swap SCH/PCB positions
-      "$mod ALT, K, exec, ${flakeDir}/KiCad-Scripts/kicad-swap.sh"
+      "$mod ALT, K, exec, kicad-swap"
       # Cycle through project instances
-      "$mod, bracketright, exec, ${flakeDir}/KiCad-Scripts/kicad-cycle.sh f" # Cycle KiCad projects forward
-      "$mod, bracketleft, exec, ${flakeDir}/KiCad-Scripts/kicad-cycle.sh b" # Cycle KiCad projects backward
+      "$mod, bracketright, exec, kicad-cycle f"
+      "$mod, bracketleft, exec, kicad-cycle b"
 
       # FreeCAD - go to workspace 110, launch if not running
       "$mod, F, exec, hyprctl dispatch workspace 110; hyprctl clients -j | grep -q org.freecad.FreeCAD || env QT_QPA_PLATFORM=xcb FreeCAD --single-instance"
