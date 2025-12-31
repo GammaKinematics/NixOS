@@ -41,22 +41,21 @@ in
 
     # Modes available in sidebar tabs
     modes = [
-      "drun"
       "favorites:rofi-favorites"
+      "drun"
       "calc"
       "emoji"
       "max30:rofi-max30"
-      "system:rofi-system"
     ];
 
     extraConfig = {
       show-icons = true;
-      display-drun = "";
+      display-system = "";
       display-favorites = "";
+      display-drun = "";
       display-calc = "";
       display-emoji = "";
       display-max30 = "";
-      display-system = "";
       drun-display-format = "{name}";
       scroll-method = 0;
       disable-history = false;

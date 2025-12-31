@@ -11,7 +11,7 @@
     # Keybindings
     bind = [
       # Rofi
-      "$mod, Space, exec, rofi -show drun"
+      "$mod, Space, exec, rofi -show system:rofi-system"
       "$mod ALT, Space, exec, rofi-websearch"
 
       # Foot terminal - go to workspace 50, launch if not running
