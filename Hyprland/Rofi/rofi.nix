@@ -106,7 +106,6 @@ in
       kb-toggle-case-sensitivity = "grave,dead_grave";
       kb-toggle-sort = "Alt+grave";
       kb-cancel = "Escape";
-      kb-custom-1 = "1"; # Go back in system menu
     };
 
     theme =

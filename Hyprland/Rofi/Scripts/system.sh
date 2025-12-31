@@ -4,16 +4,6 @@
 
 STATE="${ROFI_DATA:-main}"
 SELECTION="$1"
-RETV="${ROFI_RETV:-0}"
-
-# Handle custom key (kb-custom-1 = backspace, returns 10)
-if [[ "$RETV" == "10" ]]; then
-    case "$STATE" in
-        output|input) show_sound; exit 0 ;;
-        sound|brightness|profile|power) show_main; exit 0 ;;
-        *) exit 0 ;;
-    esac
-fi
 
 # ==============================================================================
 # Helper Functions

@@ -6,24 +6,9 @@ PLACES_DB="$HOME/.zen/default/places.sqlite"
 TEMP_DB="/tmp/rofi-bookmarks.sqlite"
 STATE="${ROFI_DATA:-3}"  # 3 = Bookmarks Toolbar folder ID
 SELECTION="$1"
-RETV="${ROFI_RETV:-0}"
 
 # Copy database to avoid lock issues (browser keeps it locked)
 cp "$PLACES_DB" "$TEMP_DB" 2>/dev/null
-
-# Handle back key (kb-custom-1)
-if [[ "$RETV" == "10" ]]; then
-    if [[ "$STATE" == "3" ]]; then
-        exit 0
-    else
-        # Get parent folder
-        parent=$(sqlite3 "$TEMP_DB" "SELECT parent FROM moz_bookmarks WHERE id = $STATE;")
-        [[ -z "$parent" || "$parent" == "0" || "$parent" == "1" ]] && parent=3
-        echo -en "\0data\x1f${parent}\n"
-        show_folder "$parent"
-        exit 0
-    fi
-fi
 
 show_folder() {
     local folder_id="$1"
