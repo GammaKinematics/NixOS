@@ -17,7 +17,7 @@
     ./mako.nix
     ./Rofi/rofi.nix
     ./KiCad/kicad.nix
-    ./Quickshell/quickshell.nix
+    ./waybar.nix
   ];
 
   # ============================================================================

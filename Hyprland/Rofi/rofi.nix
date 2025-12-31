@@ -4,6 +4,10 @@ let
   scriptsDir = ./Scripts;
 in
 {
+  # Start wl-gammarelay-rs for external monitor brightness control
+  wayland.windowManager.hyprland.settings.exec-once = [
+    "wl-gammarelay-rs"
+  ];
 
   # Standalone rofi scripts (not plugins)
   home.packages = with pkgs-unstable; [
@@ -11,9 +15,17 @@ in
     rofi-network-manager # Run as: rofi-network-manager
     ddgr # DuckDuckGo CLI for search results
 
+    # Dependencies for system control scripts
+    brightnessctl # Hardware backlight for internal display
+    wl-gammarelay-rs # Software gamma for external monitors
+    bc # Calculator for brightness math
+    sqlite # For reading browser bookmarks
+
     # Custom scripts
     (pkgs.writeShellScriptBin "rofi-websearch" (builtins.readFile "${scriptsDir}/websearch.sh"))
     (pkgs.writeShellScriptBin "rofi-max30" (builtins.readFile "${scriptsDir}/max30.sh"))
+    (pkgs.writeShellScriptBin "rofi-system" (builtins.readFile "${scriptsDir}/system.sh"))
+    (pkgs.writeShellScriptBin "rofi-favorites" (builtins.readFile "${scriptsDir}/favorites.sh"))
   ];
 
   programs.rofi = {
@@ -30,17 +42,21 @@ in
     # Modes available in sidebar tabs
     modes = [
       "drun"
+      "favorites:rofi-favorites"
       "calc"
       "emoji"
       "max30:rofi-max30"
+      "system:rofi-system"
     ];
 
     extraConfig = {
       show-icons = true;
       display-drun = "";
+      display-favorites = "";
       display-calc = "";
       display-emoji = "";
       display-max30 = "";
+      display-system = "";
       drun-display-format = "{name}";
       scroll-method = 0;
       disable-history = false;
@@ -91,6 +107,7 @@ in
       kb-toggle-case-sensitivity = "grave,dead_grave";
       kb-toggle-sort = "Alt+grave";
       kb-cancel = "Escape";
+      kb-custom-1 = "1"; # Go back in system menu
     };
 
     theme =

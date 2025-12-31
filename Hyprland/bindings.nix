@@ -113,8 +113,8 @@
       "SHIFT, Print, exec, mkdir -p ~/Pictures/Screenshots && grimblast --notify copysave output ~/Pictures/Screenshots/$(date +%F_%T).png"
       "CTRL, Print, exec, grimblast --notify save area - | swappy -f -"
 
-      # Control center (quickshell)
-      "$mod, X, exec, quickshell -c control-center"
+      # System menu (rofi)
+      "$mod, X, exec, rofi -show system -modes 'system:rofi-system'"
 
       # On-screen keyboard toggle (for tablet mode)
       # "$mod, K, exec, pkill wvkbd-mobintl || wvkbd-mobintl"

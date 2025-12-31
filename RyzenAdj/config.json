@@ -3,24 +3,24 @@
     "stapm": 15000,
     "fast": 18000,
     "slow": 16000,
-    "temp": 85
+    "temp": 80
   },
   "balanced": {
-    "stapm": 25000,
-    "fast": 32000,
-    "slow": 28000,
-    "temp": 95
+    "stapm": 22500,
+    "fast": 30000,
+    "slow": 25000,
+    "temp": 90
   },
   "performance": {
-    "stapm": 35000,
-    "fast": 45000,
-    "slow": 40000,
+    "stapm": 30000,
+    "fast": 40000,
+    "slow": 35000,
     "temp": 100
   },
   "compile": {
-    "stapm": 45000,
-    "fast": 55000,
-    "slow": 50000,
+    "stapm": 40000,
+    "fast": 50000,
+    "slow": 45000,
     "temp": 100
   }
 }
