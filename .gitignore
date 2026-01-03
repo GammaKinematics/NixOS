@@ -28,3 +28,7 @@ nixos-hardware-fork/
 
 # Hyprland wiki
 hyprland-wiki/
+
+st/
+
+dwm/

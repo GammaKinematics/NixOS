@@ -3,8 +3,6 @@
 # and in the NixOS manual (accessible by running 'nixos-help').
 
 {
-  config,
-  lib,
   pkgs,
   ...
 }:
@@ -13,6 +11,9 @@
   imports = [
     ./hardware-configuration.nix
     ./stylix.nix
+    ./Hyprsuck/hyprsuck.nix
+    # ./Suckless/suckless.nix  # Uncomment for dwm (and comment Hyprsuck)
+    ./ryzenadj.nix
     # ./virtualisation.nix
   ];
 
@@ -40,15 +41,6 @@
 
   # Enable bluetooth
   hardware.bluetooth.enable = true;
-
-  # AMD APU tuning via ryzen_smu kernel module (for RyzenAdj)
-  hardware.cpu.amd.ryzen-smu.enable = true;
-  systemd.tmpfiles.rules = [
-    "z /sys/kernel/ryzen_smu_drv/smn 0660 root wheel -"
-    "z /sys/kernel/ryzen_smu_drv/smu_args 0660 root wheel -"
-    "z /sys/kernel/ryzen_smu_drv/mp1_smu_cmd 0660 root wheel -"
-    "z /sys/kernel/ryzen_smu_drv/rsmu_cmd 0660 root wheel -"
-  ];
 
   # Set your time zone.
   time.timeZone = "Asia/Ho_Chi_Minh";
@@ -121,13 +113,22 @@
   environment.systemPackages = with pkgs; [
     wget
     git
+    bat
+    neofetch
+    xdotool
+    jq
+
+    # Disk utilities
+    gparted
     gnome-disk-utility
 
-    kicad
-    freecad
-    bambu-studio
+    # Image / PDF viewers
+    kdePackages.gwenview
+    kdePackages.okular
 
-    ryzenadj
+    # File browser
+    nautilus
+    ffmpegthumbnailer
   ];
 
   system.stateVersion = "25.11";

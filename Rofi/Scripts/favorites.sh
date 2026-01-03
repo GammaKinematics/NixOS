@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Rofi Favorites - Reads Zen/Firefox bookmarks directly from SQLite
 # Supports folder navigation with ROFI_DATA state tracking
+# Works with both Hyprland and dwm (no WM-specific code)
 
 PLACES_DB="$HOME/.zen/default/places.sqlite"
 TEMP_DB="/tmp/rofi-bookmarks.sqlite"

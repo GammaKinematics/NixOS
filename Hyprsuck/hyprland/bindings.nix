@@ -118,6 +118,9 @@
 
       # On-screen keyboard toggle (for tablet mode)
       # "$mod, K, exec, pkill wvkbd-mobintl || wvkbd-mobintl"
+
+      # Refresh waybar (for dock/undock)
+      "$mod CTRL, Space, exec, pkill waybar; waybar-start"
     ];
 
     # Mouse bindings

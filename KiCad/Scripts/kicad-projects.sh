@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Rofi KiCad project launcher
 # Two-step: select folder, then select project
+# Works with both Hyprland and dwm
 
 # Define project folders: "Display Name|/path/to/folder"
 PROJECT_FOLDERS=(

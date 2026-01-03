@@ -1,5 +1,5 @@
 # Hyprlock - Screen locker configuration
-{ pkgs-unstable, ... }:
+{ pkgs, ... }:
 
 {
   # Disable Stylix's hyprlock theming (we use screenshot blur)
@@ -7,7 +7,7 @@
 
   programs.hyprlock = {
     enable = true;
-    package = pkgs-unstable.hyprlock;
+    package = pkgs.hyprlock;
     settings = {
       general = {
         hide_cursor = true;

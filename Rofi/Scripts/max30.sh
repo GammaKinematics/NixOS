@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 # Rofi Max30 mode - list and open video files with custom names
+# Supports both Hyprland (Wayland) and dwm (X11)
+
+# ==============================================================================
+# Environment Detection
+# ==============================================================================
+if [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
+    WM="hyprland"
+else
+    WM="dwm"
+fi
 
 VIDEOS=(
     "Max Out Cardio|/data-bis/Insanity MAX 30/Max Out Cardio.mkv"
@@ -24,7 +34,12 @@ for entry in "${VIDEOS[@]}"; do
     path="${entry#*|}"
     if [ "$name" = "$SELECTED" ]; then
         setsid xdg-open "$path" >/dev/null 2>&1 &
-        hyprctl dispatch workspace 90 >/dev/null 2>&1
+        if [[ "$WM" == "hyprland" ]]; then
+            hyprctl dispatch workspace 90 >/dev/null 2>&1
+        else
+            # dwm: Switch to video tag (tag 14)
+            xdotool key super+m 2>/dev/null || true
+        fi
         exit 0
     fi
 done

@@ -1,45 +1,53 @@
-{ pkgs-unstable, pkgs, ... }:
+# Rofi configuration and scripts
+# Works with both Hyprland (Wayland) and dwm (X11)
+{ pkgs-unstable, pkgs, config, lib, ... }:
 
 let
   scriptsDir = ./Scripts;
+
+  # Detect if we're in Wayland or X11 based on session type
+  # This is evaluated at build time, so we need runtime detection in scripts
+  isWayland = config.wayland.windowManager.hyprland.enable or false;
+
+  # Terminal varies by environment
+  terminal = if isWayland then "foot" else "st";
 in
 {
-  # Start wl-gammarelay-rs for external monitor brightness control
-  wayland.windowManager.hyprland.settings.exec-once = [
-    "wl-gammarelay-rs"
-  ];
-
-  # Standalone rofi scripts (not plugins)
+  # Wayland-specific packages (only when using Hyprland)
   home.packages = with pkgs-unstable; [
-    rofi-bluetooth # Run as: rofi-bluetooth
-    rofi-network-manager # Run as: rofi-network-manager
-    ddgr # DuckDuckGo CLI for search results
+    rofi-bluetooth
+    rofi-network-manager
+    ddgr
+    brightnessctl
+    bc
+    sqlite
 
-    # Dependencies for system control scripts
-    brightnessctl # Hardware backlight for internal display
-    wl-gammarelay-rs # Software gamma for external monitors
-    bc # Calculator for brightness math
-    sqlite # For reading browser bookmarks
-
-    # Custom scripts
+    # Custom scripts (environment-aware)
     (pkgs.writeShellScriptBin "rofi-websearch" (builtins.readFile "${scriptsDir}/websearch.sh"))
     (pkgs.writeShellScriptBin "rofi-max30" (builtins.readFile "${scriptsDir}/max30.sh"))
     (pkgs.writeShellScriptBin "rofi-system" (builtins.readFile "${scriptsDir}/system.sh"))
     (pkgs.writeShellScriptBin "rofi-favorites" (builtins.readFile "${scriptsDir}/favorites.sh"))
-  ];
+  ] ++ (if isWayland then [
+    wl-gammarelay-rs
+    busctl  # For wl-gammarelay-rs brightness control
+  ] else [
+  ]);
+
+  # Start wl-gammarelay-rs on Hyprland
+  wayland.windowManager.hyprland.settings = lib.mkIf isWayland {
+    exec-once = [ "wl-gammarelay-rs" ];
+  };
 
   programs.rofi = {
     enable = true;
     package = pkgs-unstable.rofi;
-    terminal = "foot";
+    terminal = terminal;
 
-    # Actual rofi plugins (loaded via -show)
     plugins = with pkgs-unstable; [
-      rofi-calc # rofi -show calc
-      rofi-emoji # rofi -show emoji
+      rofi-calc
+      rofi-emoji
     ];
 
-    # Modes available in sidebar tabs
     modes = [
       "favorites:rofi-favorites"
       "drun"
@@ -64,7 +72,6 @@ in
       sorting-method = "fzf";
       matching = "fuzzy";
 
-      # Keybindings (edit as needed)
       kb-primary-paste = "Control+V,Shift+Insert";
       kb-secondary-paste = "Control+v,Insert";
       kb-secondary-copy = "Control+c";

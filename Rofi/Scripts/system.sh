@@ -1,9 +1,19 @@
 #!/usr/bin/env bash
 # Rofi System Menu - as rofi mode with inline submenus
 # Uses ROFI_DATA for state tracking between calls
+# Supports both Hyprland (Wayland) and dwm (X11)
 
 STATE="${ROFI_DATA:-main}"
 SELECTION="$1"
+
+# ==============================================================================
+# Environment Detection
+# ==============================================================================
+if [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
+    WM="hyprland"
+else
+    WM="dwm"
+fi
 
 # ==============================================================================
 # Helper Functions
@@ -15,8 +25,14 @@ is_muted() { wpctl get-volume @DEFAULT_AUDIO_SINK@ 2>/dev/null | grep -q MUTED &
 is_mic_muted() { wpctl get-volume @DEFAULT_AUDIO_SOURCE@ 2>/dev/null | grep -q MUTED && echo "yes" || echo "no"; }
 get_brightness_internal() { brightnessctl -m 2>/dev/null | cut -d',' -f4 | tr -d '%'; }
 get_brightness_external() {
-    local val=$(busctl --user get-property rs.wl-gammarelay /outputs/DP_3 rs.wl.gammarelay Brightness 2>/dev/null | awk '{print $2}')
-    echo "${val:-1}" | awk '{print int($1*100)}'
+    if [[ "$WM" == "hyprland" ]]; then
+        local val=$(busctl --user get-property rs.wl-gammarelay /outputs/DP_3 rs.wl.gammarelay Brightness 2>/dev/null | awk '{print $2}')
+        echo "${val:-1}" | awk '{print int($1*100)}'
+    else
+        # X11: Use xrandr gamma (approximate)
+        local gamma=$(xrandr --verbose | grep -A5 "DP-3" | grep "Brightness" | awk '{print $2}' 2>/dev/null)
+        echo "${gamma:-1}" | awk '{print int($1*100)}'
+    fi
 }
 get_power_profile() { powerprofilesctl get 2>/dev/null || echo "balanced"; }
 
@@ -188,7 +204,6 @@ handle_output() {
     case "$SELECTION" in
         *"Back"*) show_sound ;;
         *)
-            # ID is passed via ROFI_INFO
             [[ -n "$ROFI_INFO" ]] && wpctl set-default "$ROFI_INFO"
             show_output
             ;;
@@ -199,7 +214,6 @@ handle_input() {
     case "$SELECTION" in
         *"Back"*) show_sound ;;
         *)
-            # ID is passed via ROFI_INFO
             [[ -n "$ROFI_INFO" ]] && wpctl set-default "$ROFI_INFO"
             show_input
             ;;
@@ -211,32 +225,43 @@ handle_brightness() {
         *"Internal +5%"*) brightnessctl -q set +5%; show_brightness ;;
         *"Internal -5%"*) brightnessctl -q set 5%-; show_brightness ;;
         *"External +5%"*)
-            current=$(get_brightness_external)
-            new=$((current + 5)); [[ $new -gt 100 ]] && new=100
-            val=$(echo "scale=2; $new/100" | bc)
-            busctl --user set-property rs.wl-gammarelay /outputs/DP_3 rs.wl.gammarelay Brightness d "$val" 2>/dev/null
+            if [[ "$WM" == "hyprland" ]]; then
+                current=$(get_brightness_external)
+                new=$((current + 5)); [[ $new -gt 100 ]] && new=100
+                val=$(echo "scale=2; $new/100" | bc)
+                busctl --user set-property rs.wl-gammarelay /outputs/DP_3 rs.wl.gammarelay Brightness d "$val" 2>/dev/null
+            else
+                current=$(get_brightness_external)
+                new=$((current + 5)); [[ $new -gt 100 ]] && new=100
+                val=$(echo "scale=2; $new/100" | bc)
+                xrandr --output DP-3 --brightness "$val" 2>/dev/null
+            fi
             show_brightness ;;
         *"External -5%"*)
-            current=$(get_brightness_external)
-            new=$((current - 5)); [[ $new -lt 5 ]] && new=5
-            val=$(echo "scale=2; $new/100" | bc)
-            busctl --user set-property rs.wl-gammarelay /outputs/DP_3 rs.wl.gammarelay Brightness d "$val" 2>/dev/null
+            if [[ "$WM" == "hyprland" ]]; then
+                current=$(get_brightness_external)
+                new=$((current - 5)); [[ $new -lt 5 ]] && new=5
+                val=$(echo "scale=2; $new/100" | bc)
+                busctl --user set-property rs.wl-gammarelay /outputs/DP_3 rs.wl.gammarelay Brightness d "$val" 2>/dev/null
+            else
+                current=$(get_brightness_external)
+                new=$((current - 5)); [[ $new -lt 5 ]] && new=5
+                val=$(echo "scale=2; $new/100" | bc)
+                xrandr --output DP-3 --brightness "$val" 2>/dev/null
+            fi
             show_brightness ;;
         *"Back"*) show_main ;;
         *) show_brightness ;;
     esac
 }
 
-apply_tuning() {
-    "$HOME/NixOS/RyzenAdj/power-tuning.sh" apply >/dev/null 2>&1 &
-}
-
 handle_power_profile() {
     case "$SELECTION" in
-        *"Performance"*) powerprofilesctl set performance; apply_tuning; show_power_profile ;;
-        *"Balanced"*) powerprofilesctl set balanced; apply_tuning; show_power_profile ;;
-        *"Power Saver"*) powerprofilesctl set power-saver; apply_tuning; show_power_profile ;;
-        *"Edit Tuning"*) coproc (zeditor "$HOME/NixOS/RyzenAdj/config.json" &); exit 0 ;;
+        # systemd path watcher auto-applies power-tuning on profile change
+        *"Performance"*) powerprofilesctl set performance; show_power_profile ;;
+        *"Balanced"*) powerprofilesctl set balanced; show_power_profile ;;
+        *"Power Saver"*) powerprofilesctl set power-saver; show_power_profile ;;
+        *"Edit Tuning"*) coproc (zeditor "$HOME/NixOS/ryzenadj.nix" &); exit 0 ;;
         *"Back"*) show_main ;;
         *) show_power_profile ;;
     esac
@@ -246,8 +271,20 @@ handle_power() {
     case "$SELECTION" in
         *"Shutdown"*) systemctl poweroff ;;
         *"Reboot"*) systemctl reboot ;;
-        *"Logout"*) hyprctl dispatch exit ;;
-        *"Lock"*) hyprlock & exit 0 ;;
+        *"Logout"*)
+            if [[ "$WM" == "hyprland" ]]; then
+                hyprctl dispatch exit
+            else
+                pkill -x dwm
+            fi
+            ;;
+        *"Lock"*)
+            if [[ "$WM" == "hyprland" ]]; then
+                hyprlock & exit 0
+            else
+                slock & exit 0
+            fi
+            ;;
         *"Back"*) show_main ;;
         *) show_power ;;
     esac

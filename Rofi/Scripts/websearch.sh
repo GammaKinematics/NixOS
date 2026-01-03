@@ -1,5 +1,24 @@
 #!/usr/bin/env bash
 # Rofi web search - with DuckDuckGo result preview
+# Supports both Hyprland (Wayland) and dwm (X11)
+
+# ==============================================================================
+# Environment Detection
+# ==============================================================================
+if [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
+    WM="hyprland"
+else
+    WM="dwm"
+fi
+
+switch_to_browser() {
+    if [[ "$WM" == "hyprland" ]]; then
+        hyprctl dispatch workspace 70
+    else
+        # dwm: Switch to web_prim tag (mod+b)
+        xdotool key super+b 2>/dev/null || true
+    fi
+}
 
 # Step 1: Query input (no list)
 QUERY=$(echo "" | rofi -dmenu -p "Search  :  " -l 0)
@@ -9,7 +28,7 @@ QUERY=$(echo "" | rofi -dmenu -p "Search  :  " -l 0)
 if echo "$QUERY" | grep -qE '\.(com|org|net|io|dev|co|me|gov|edu|app|xyz|info)(/|$)'; then
     # Add https:// if no protocol specified
     [[ "$QUERY" =~ ^https?:// ]] || QUERY="https://$QUERY"
-    hyprctl dispatch workspace 70
+    switch_to_browser
     xdg-open "$QUERY"
     exit 0
 fi
@@ -30,7 +49,7 @@ case "$ENGINE" in
 
         if [ -z "$RESULTS" ]; then
             # Fallback to direct search if no results
-            hyprctl dispatch workspace 70
+            switch_to_browser
             xdg-open "https://duckduckgo.com/?q=$ENCODED"
             exit 0
         fi
@@ -43,20 +62,20 @@ case "$ENGINE" in
         # Get URL for selected title
         URL=$(echo "$RESULTS" | grep "^$SELECTED	" | cut -f2)
         if [ -n "$URL" ]; then
-            hyprctl dispatch workspace 70
+            switch_to_browser
             xdg-open "$URL"
         fi
         ;;
     "Google")
-        hyprctl dispatch workspace 70
+        switch_to_browser
         xdg-open "https://www.google.com/search?q=$ENCODED"
         ;;
     "MyNixOS")
-        hyprctl dispatch workspace 70
+        switch_to_browser
         xdg-open "https://mynixos.com/search?q=$ENCODED"
         ;;
     "Nixpkgs")
-        hyprctl dispatch workspace 70
+        switch_to_browser
         xdg-open "https://search.nixos.org/packages?query=$ENCODED"
         ;;
 esac

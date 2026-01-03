@@ -13,7 +13,10 @@ in
     ./git.nix
     ./zed.nix
     ./zen.nix
-    ./Hyprland/hyprland.nix
+    ./Rofi/rofi.nix
+    ./KiCad/kicad.nix
+    ./Hyprsuck/home.nix
+    # ./Suckless/home.nix  # Uncomment for dwm (and comment Hyprsuck)
   ];
 
   home.username = "lebowski";
@@ -35,14 +38,22 @@ in
     libreoffice-fresh
     keepassxc
 
-    # CLI tools
-    bat
-    neofetch
-    jq # JSON processor (used by power-tuning script)
+    # CAD & Manufacturing
+    freecad
+    bambu-studio
 
     # Dev tools
     claude-code
   ];
+
+  # ============================================================================
+  # Notifications (shared between Hyprland and dwm)
+  # ============================================================================
+  services.dunst = {
+    enable = true;
+    package = pkgs-unstable.dunst;
+    settings.global.timeout = 3;
+  };
 
   # ============================================================================
   # Shell Aliases
@@ -65,11 +76,6 @@ in
 
   # --- Bash shell ---
   programs.bash.enable = true;
-
-  programs.foot = {
-    enable = true;
-    package = pkgs-unstable.foot;
-  };
 
   # ============================================================================
   # Disable version check - we intentionally use unstable home-manager with stable nixpkgs
