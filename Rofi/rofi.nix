@@ -1,6 +1,12 @@
 # Rofi configuration and scripts
 # Works with both Hyprland (Wayland) and dwm (X11)
-{ pkgs-unstable, pkgs, config, lib, ... }:
+{
+  pkgs-unstable,
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 let
   scriptsDir = ./Scripts;
@@ -14,24 +20,31 @@ let
 in
 {
   # Wayland-specific packages (only when using Hyprland)
-  home.packages = with pkgs-unstable; [
-    rofi-bluetooth
-    rofi-network-manager
-    ddgr
-    brightnessctl
-    bc
-    sqlite
+  home.packages =
+    with pkgs-unstable;
+    [
+      rofi-bluetooth
+      rofi-network-manager
+      ddgr
+      brightnessctl
+      bc
+      sqlite
 
-    # Custom scripts (environment-aware)
-    (pkgs.writeShellScriptBin "rofi-websearch" (builtins.readFile "${scriptsDir}/websearch.sh"))
-    (pkgs.writeShellScriptBin "rofi-max30" (builtins.readFile "${scriptsDir}/max30.sh"))
-    (pkgs.writeShellScriptBin "rofi-system" (builtins.readFile "${scriptsDir}/system.sh"))
-    (pkgs.writeShellScriptBin "rofi-favorites" (builtins.readFile "${scriptsDir}/favorites.sh"))
-  ] ++ (if isWayland then [
-    wl-gammarelay-rs
-    busctl  # For wl-gammarelay-rs brightness control
-  ] else [
-  ]);
+      # Custom scripts (environment-aware)
+      (pkgs.writeShellScriptBin "rofi-websearch" (builtins.readFile "${scriptsDir}/websearch.sh"))
+      (pkgs.writeShellScriptBin "rofi-max30" (builtins.readFile "${scriptsDir}/max30.sh"))
+      (pkgs.writeShellScriptBin "rofi-system" (builtins.readFile "${scriptsDir}/system.sh"))
+      (pkgs.writeShellScriptBin "rofi-favorites" (builtins.readFile "${scriptsDir}/favorites.sh"))
+    ]
+    ++ (
+      if isWayland then
+        [
+          wl-gammarelay-rs
+        ]
+      else
+        [
+        ]
+    );
 
   # Start wl-gammarelay-rs on Hyprland
   wayland.windowManager.hyprland.settings = lib.mkIf isWayland {
@@ -49,6 +62,7 @@ in
     ];
 
     modes = [
+      "system:rofi-system"
       "favorites:rofi-favorites"
       "drun"
       "calc"

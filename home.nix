@@ -15,8 +15,8 @@ in
     ./zen.nix
     ./Rofi/rofi.nix
     ./KiCad/kicad.nix
-    ./Hyprsuck/home.nix
-    # ./Suckless/home.nix  # Uncomment for dwm (and comment Hyprsuck)
+    # ./Hyprsuck/home.nix
+    ./Suckless/home.nix # Uncomment for dwm (and comment Hyprsuck)
   ];
 
   home.username = "lebowski";
@@ -45,6 +45,14 @@ in
     # Dev tools
     claude-code
   ];
+
+  # ============================================================================
+  # GTK Icon Theme
+  # ============================================================================
+  gtk.iconTheme = {
+    package = pkgs-unstable.papirus-icon-theme;
+    name = "Papirus-Dark";
+  };
 
   # ============================================================================
   # Notifications (shared between Hyprland and dwm)

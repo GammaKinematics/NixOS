@@ -14,13 +14,11 @@
   # ============================================================================
   services.xserver = {
     enable = true;
-    displayManager.startx = {
-      enable = true;
-      extraCommands = ''
-        # Status bar
-        slstatus &
-      '';
-    };
+
+    # Keyboard layout
+    xkb.layout = "us";
+
+    displayManager.startx.enable = true;
 
     # Auto-lock after 10 minutes of inactivity
     xautolock = {
@@ -29,6 +27,9 @@
       locker = "${pkgs.slock}/bin/slock";
     };
   };
+
+  # Input (libinput)
+  services.libinput.enable = true;
 
   # ============================================================================
   # Screen Locker
@@ -39,22 +40,25 @@
   };
 
   # ============================================================================
+  # XDG Portal for X11
+  # ============================================================================
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    config.common.default = "gtk";
+  };
+
+  # ============================================================================
   # X11 ecosystem packages
   # ============================================================================
   environment.systemPackages = with pkgs; [
     # Clipboard
     xclip
+
+    # Numlock on startup
+    numlockx
   ];
 
-  # ============================================================================
-  # Display hotplug management
-  # ============================================================================
-  services.autorandr = {
-    enable = true;
-    hooks.postswitch = {
-      "restart-slstatus" = "pkill slstatus; slstatus &";
-    };
-  };
 
   # ============================================================================
   # Polkit authentication agent

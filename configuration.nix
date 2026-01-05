@@ -11,8 +11,8 @@
   imports = [
     ./hardware-configuration.nix
     ./stylix.nix
-    ./Hyprsuck/hyprsuck.nix
-    # ./Suckless/suckless.nix  # Uncomment for dwm (and comment Hyprsuck)
+    # ./Hyprsuck/hyprsuck.nix
+    ./Suckless/suckless.nix # Uncomment for dwm (and comment Hyprsuck)
     ./ryzenadj.nix
     # ./virtualisation.nix
   ];
@@ -127,8 +127,9 @@
     kdePackages.okular
 
     # File browser
-    nautilus
-    ffmpegthumbnailer
+    xfce.thunar
+    xfce.thunar-volman
+    xfce.tumbler  # thumbnails
   ];
 
   system.stateVersion = "25.11";
