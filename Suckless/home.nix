@@ -14,6 +14,9 @@
   programs.autorandr = {
     enable = true;
     package = pkgs.autorandr;
+    hooks.postswitch = {
+      "set-xft-dpi" = "echo 'Xft.dpi: 96' | xrdb -merge";
+    };
     profiles = {
       "docked" = {
         fingerprint = {
@@ -26,6 +29,7 @@
             primary = false;
             mode = "1920x1080";
             rate = "75.00";
+            dpi = 96;
             position = "0x0";
           };
           eDP-1 = {
@@ -33,12 +37,13 @@
             primary = true;
             mode = "1920x1200";
             rate = "60.00";
+            dpi = 96;
             position = "1920x0";
             rotate = "right";
-            scale = {
-              x = 0.8;
-              y = 0.8;
-            };
+            # scale = {
+            #   x = 0.8;
+            #   y = 0.8;
+            # };
           };
         };
       };
@@ -52,6 +57,7 @@
             primary = true;
             mode = "1920x1200";
             rate = "60.00";
+            dpi = 96;
             position = "0x0";
           };
         };
@@ -69,6 +75,25 @@
     package = pkgs.flameshot;
   };
 
+  # Compositor for transparency
+  services.picom = {
+    enable = true;
+    package = pkgs.picom;
+    backend = "glx";
+    vSync = true;
+    activeOpacity = 0.9;
+    inactiveOpacity = 0.8;
+    menuOpacity = 0.5;
+    opacityRules = [
+      "100:fullscreen"
+      "100:class_g = 'dwm'"
+      "100:window_type = 'dock'"
+    ];
+    settings = {
+      corner-radius = 10;
+    };
+  };
+
   # X11 startup script
   home.file.".xinitrc".text = ''
     # D-Bus environment for GTK apps (fixes slow first launch)
@@ -83,8 +108,11 @@
     # Status bar
     slstatus &
 
-    # Wallpaper
-    ~/.fehbg || true
+    # Compositor
+    picom &
+
+    # Wallpaper (DP-3: norse, eDP-1: pearl)
+    feh --bg-fill ~/NixOS/Wallpapers/pearl.jpg --bg-fill ~/NixOS/Wallpapers/siege.png
 
     # Create dwmfifo for IPC
     mkfifo /tmp/dwm.fifo 2>/dev/null || true

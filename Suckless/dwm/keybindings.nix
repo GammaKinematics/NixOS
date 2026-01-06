@@ -105,10 +105,10 @@
     	{ MODKEY|ShiftMask,             XK_Down,   tagtonext,      {0} },
 
     	/* Move to monitor */
-    	{ MODKEY,                       XK_Left,   focusnthmon,    {.i = 0 } },
-    	{ MODKEY,                       XK_Right,  focusnthmon,    {.i = 1 } },
-    	{ MODKEY|ShiftMask,             XK_Left,   tagnthmon,      {.i = 0 } },
-    	{ MODKEY|ShiftMask,             XK_Right,  tagnthmon,      {.i = 1 } },
+    	{ MODKEY,                       XK_Left,   focusnthmon,    {.i = 1 } },
+    	{ MODKEY,                       XK_Right,  focusnthmon,    {.i = 0 } },
+    	{ MODKEY|ShiftMask,             XK_Left,   tagnthmon,      {.i = 1 } },
+    	{ MODKEY|ShiftMask,             XK_Right,  tagnthmon,      {.i = 0 } },
 
     	/* Swap monitors */
     	{ MODKEY|ShiftMask,             XK_apostrophe, swapmon,    {0} },
@@ -163,6 +163,11 @@
     	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
     	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
     	{ ClkTabBar,            0,              Button1,        focuswin,       {0} },
+    	/* Scroll through tags with Mod+scroll */
+    	{ ClkRootWin,           MODKEY,         Button4,        viewprev,       {0} },
+    	{ ClkRootWin,           MODKEY,         Button5,        viewnext,       {0} },
+    	{ ClkClientWin,         MODKEY,         Button4,        viewprev,       {0} },
+    	{ ClkClientWin,         MODKEY,         Button5,        viewnext,       {0} },
     };
   '';
 }

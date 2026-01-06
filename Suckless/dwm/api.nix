@@ -10,7 +10,6 @@
     	/* standard commands */
     	{ "term",            spawn,          {.v = termcmd} },
     	{ "quit",            quit,           {0} },
-    	{ "togglebar",       togglebar,      {0} },
     	{ "focusstack",      focusstack,     .parse = parseplusminus },
     	{ "incnmaster",      incnmaster,     .parse = parseplusminus },
     	{ "setmfact",        setmfact,       .parse = parseplusminus },

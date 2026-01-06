@@ -114,6 +114,7 @@
     wget
     git
     bat
+    btop
     neofetch
     xdotool
     jq
@@ -129,7 +130,7 @@
     # File browser
     xfce.thunar
     xfce.thunar-volman
-    xfce.tumbler  # thumbnails
+    xfce.tumbler # thumbnails
   ];
 
   system.stateVersion = "25.11";

@@ -10,8 +10,8 @@
     # Catppuccin Mocha theme
     base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
 
-    # Wallpaper
-    image = ./Wallpapers/Shift.png;
+    # Wallpaper (used for color scheme generation)
+    image = ./Wallpapers/siege.png;
 
     # Cursor
     cursor = {
