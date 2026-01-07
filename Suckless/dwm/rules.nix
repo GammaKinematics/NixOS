@@ -24,7 +24,7 @@
     	{ "KiCad",            NULL,       "Symbol Editor",      1 << 15,      0,            0 },  /* kicad sch/pcb */
     	{ "KiCad",            NULL,       "PCB Editor",         1 << 15,      0,            1 },  /* kicad sch/pcb */
     	{ "KiCad",            NULL,       "Footprint Editor",   1 << 15,      0,            1 },  /* kicad sch/pcb */
-    	{ "Kicad",            NULL,       NULL,                 1 << 16,      0,            0 },  /* kicad pm */
+    	{ "KiCad",            NULL,       NULL,                 1 << 16,      0,            0 },  /* kicad pm (catch-all after editors) */
     };
   '';
 }

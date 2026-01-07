@@ -28,18 +28,19 @@ if [[ "$WM" == "hyprland" ]]; then
     sleep 0.25
     xdotool key ctrl+i  # Open Symbol Editor from Schematic
 else
-    # dwm: Focus each monitor and send keys
-    # PCB on monitor 0 (left), Schematic on monitor 1 (right)
-    xdotool key super+k
-    sleep 0.25
+    # Ensure we're on kicad tag on both monitors
+    kicad-show
 
-    xdotool key super+Left
+    # Focus PCB Editor, open Footprint Editor
+    sleep 0.5
+    xdotool search --name "PCB Editor" windowactivate --sync
     sleep 0.25
-    xdotool key ctrl+u  # Open Footprint Editor from PCB
+    xdotool key ctrl+u
 
-    sleep 2
+    sleep 3
 
-    xdotool key super+Right
+    # Focus right monitor, Schematic Editor, open Symbol Editor
+    xdotool search --name "Schematic Editor" windowactivate --sync
     sleep 0.25
-    xdotool key ctrl+i  # Open Symbol Editor from Schematic
+    xdotool key ctrl+i
 fi

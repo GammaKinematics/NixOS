@@ -31,6 +31,9 @@
   # Input (libinput)
   services.libinput.enable = true;
 
+  # Accelerometer for auto-rotation
+  hardware.sensor.iio.enable = true;
+
   # ============================================================================
   # Screen Locker
   # ============================================================================
@@ -57,6 +60,34 @@
 
     # Numlock on startup
     numlockx
+
+    # Touchpad gestures
+    libinput-gestures
+
+    # Auto-rotate for mobile mode
+    (writeShellScriptBin "auto-rotate" ''
+      # Only run in mobile mode
+      [[ $(${autorandr}/bin/autorandr --current) != "mobile" ]] && exit 0
+
+      export DISPLAY=''${DISPLAY:-:0}
+
+      ${iio-sensor-proxy}/bin/monitor-sensor | while read -r line; do
+        case "$line" in
+          *"normal"*)
+            ${xorg.xrandr}/bin/xrandr --output eDP-1 --rotate normal
+            ;;
+          *"left-up"*)
+            ${xorg.xrandr}/bin/xrandr --output eDP-1 --rotate left
+            ;;
+          *"right-up"*)
+            ${xorg.xrandr}/bin/xrandr --output eDP-1 --rotate right
+            ;;
+          *"bottom-up"*)
+            ${xorg.xrandr}/bin/xrandr --output eDP-1 --rotate inverted
+            ;;
+        esac
+      done
+    '')
   ];
 
 

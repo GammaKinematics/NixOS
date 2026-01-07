@@ -7,8 +7,7 @@ let
     perc=$(cat /sys/class/power_supply/BATT/capacity 2>/dev/null || echo "0")
     status=$(cat /sys/class/power_supply/BATT/status 2>/dev/null || echo "Unknown")
 
-    if [ "$status" = "Charging" ]; then
-      icon="󰂄"
+    if [ "$status" = "Charging" ]; then icon="󰂄"
     elif [ "$perc" -ge 90 ]; then icon="󰁹"
     elif [ "$perc" -ge 80 ]; then icon="󰂂"
     elif [ "$perc" -ge 70 ]; then icon="󰂁"

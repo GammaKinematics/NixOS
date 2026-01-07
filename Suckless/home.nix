@@ -30,7 +30,7 @@
             mode = "1920x1080";
             rate = "75.00";
             dpi = 96;
-            position = "0x0";
+            position = "0x180";
           };
           eDP-1 = {
             enable = true;
@@ -39,11 +39,11 @@
             rate = "60.00";
             dpi = 96;
             position = "1920x0";
-            rotate = "right";
-            # scale = {
-            #   x = 0.8;
-            #   y = 0.8;
-            # };
+            rotate = "left";
+            scale = {
+              x = 0.75;
+              y = 0.75;
+            };
           };
         };
       };
@@ -75,15 +75,34 @@
     package = pkgs.flameshot;
   };
 
+  # Touchpad gestures (for mobile mode)
+  home.file.".config/libinput-gestures.conf".text = ''
+    # 3-finger up/down: tag navigation
+    gesture swipe up    3 sh -c 'echo "view-prev" > /tmp/dwm.fifo'
+    gesture swipe down  3 sh -c 'echo "view-next" > /tmp/dwm.fifo'
+
+    # 3-finger left/right: window cycling
+    gesture swipe left  3 sh -c 'echo "focus-prev" > /tmp/dwm.fifo'
+    gesture swipe right 3 sh -c 'echo "focus-next" > /tmp/dwm.fifo'
+
+    # 4-finger up/down: layout
+    gesture swipe up    4 sh -c 'echo "layout-mono" > /tmp/dwm.fifo'
+    gesture swipe down  4 sh -c 'echo "layout-tile" > /tmp/dwm.fifo'
+
+    # Pinch: rofi system menu / view all
+    gesture pinch in  rofi -show system
+    gesture pinch out sh -c 'echo "view-all" > /tmp/dwm.fifo'
+  '';
+
   # Compositor for transparency
   services.picom = {
     enable = true;
     package = pkgs.picom;
     backend = "glx";
     vSync = true;
-    activeOpacity = 0.9;
-    inactiveOpacity = 0.8;
-    menuOpacity = 0.5;
+    activeOpacity = 0.85;
+    inactiveOpacity = 0.75;
+    menuOpacity = 0.95;
     opacityRules = [
       "100:fullscreen"
       "100:class_g = 'dwm'"
@@ -102,6 +121,11 @@
     # Apply monitor profile
     autorandr --change --default mobile
 
+    # Disable DPMS and screen blanking
+    xset s off
+    xset -dpms
+    xset s noblank
+
     # Numlock on
     numlockx
 
@@ -110,6 +134,12 @@
 
     # Compositor
     picom &
+
+    # Touchpad gestures
+    libinput-gestures-setup start &
+
+    # Auto-rotate (only activates in mobile mode)
+    auto-rotate &
 
     # Wallpaper (DP-3: norse, eDP-1: pearl)
     feh --bg-fill ~/NixOS/Wallpapers/pearl.jpg --bg-fill ~/NixOS/Wallpapers/siege.png

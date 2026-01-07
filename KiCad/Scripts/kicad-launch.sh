@@ -68,25 +68,28 @@ if [[ "$WM" == "hyprland" ]]; then
 
 else
     # dwm: Launch KiCad, window rules handle placement
-    # Tag 15 = PM, Tag 16 = PCB, Tag 17 = Schematic
+    # Tag 16 = kicad (sch/pcb), Tag 17 = kicad PM
 
     # Switch to PM tag and launch
-    xdotool key super+k
-    sleep 0.25
-    xdotool key super+ctrl+k
-    sleep 0.25
+    echo "mon-sec" > /tmp/dwm.fifo
+    echo "kicad-pm" > /tmp/dwm.fifo
     kicad "$PROJECT" &
 
-    # Wait for PM to open, then open PCB editor
-    sleep 2
+    # Wait for PM, focus it, open PCB editor
+    sleep 3
+    xdotool search --name "$PROJECT_NAME" windowactivate --sync
+    sleep 0.25
     xdotool key ctrl+p
 
-    # Switch to KiCad view (PCB + Schematic)
-    sleep 1
-    xdotool key super+k
-
-    # Wait for PCB to open, then open schematic
-    sleep 2
+    # Wait for PCB Editor, focus it, open Schematic
+    echo "mon-prim" > /tmp/dwm.fifo
+    echo "kicad" > /tmp/dwm.fifo
+    sleep 3
+    xdotool search --name "PCB Editor" windowactivate --sync
+    sleep 0.25
     xdotool key ctrl+e
 
+    # Switch to KiCad work view
+    echo "mon-sec" > /tmp/dwm.fifo
+    echo "kicad" > /tmp/dwm.fifo
 fi

@@ -15,8 +15,9 @@ switch_to_browser() {
     if [[ "$WM" == "hyprland" ]]; then
         hyprctl dispatch workspace 70
     else
-        # dwm: Switch to web_prim tag (mod+b)
-        xdotool key super+b 2>/dev/null || true
+        # Focus primary monitor first if not on mobile (single monitor) profile
+        [[ $(autorandr --current) != "mobile" ]] && echo "mon-prim" > /tmp/dwm.fifo
+        echo "browser" > /tmp/dwm.fifo
     fi
 }
 

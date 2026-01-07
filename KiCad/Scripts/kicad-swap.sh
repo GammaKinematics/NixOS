@@ -17,6 +17,7 @@ fi
 if [[ "$WM" == "hyprland" ]]; then
     hyprctl dispatch swapactiveworkspaces DP-3 eDP-1
 else
-    # dwm: Use swapmon function (mod+shift+')
-    xdotool key super+shift+apostrophe
+    # Ensure we're on kicad tag on both monitors first
+    kicad-show
+    echo "mon-swap" > /tmp/dwm.fifo
 fi

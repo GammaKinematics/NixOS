@@ -22,6 +22,7 @@
     static const char *rofiwebcmd[] = { "rofi-websearch", NULL };
     static const char *browsercmd[] = { "zen", NULL };
     static const char *lockcmd[] = { "slock", NULL };
+    static const char *kicadshowcmd[] = { "kicad-show", NULL };
     static const char *kicadprojectscmd[] = { "kicad-projects", NULL };
     static const char *kicadlibcmd[] = { "kicad-lib-launch", NULL };
     static const char *kicadswapcmd[] = { "kicad-swap", NULL };
@@ -63,8 +64,8 @@
     	{ MODKEY|ShiftMask,             XK_z,      spawn,          {.v = editorcmd } },
 
     	/* Zen Browser (web) */
-    	{ MODKEY,                       XK_b,      view,           {.ui = 1 << 12 } },
-    	{ MODKEY|ShiftMask,             XK_b,      spawn,          {.v = browsercmd } },
+    	{ MODKEY,                       XK_x,      view,           {.ui = 1 << 12 } },
+    	{ MODKEY|ShiftMask,             XK_x,      spawn,          {.v = browsercmd } },
 
     	/* Thunar (files) */
     	{ MODKEY,                       XK_n,      spawn,          {.v = filesvos } },
@@ -77,7 +78,7 @@
     	{ MODKEY,                       XK_Escape, spawn,          {.v = lockcmd } },
 
     	/* KiCad */
-    	{ MODKEY,                       XK_k,      view,           {.ui = 1 << 15 } },
+    	{ MODKEY,                       XK_k,      spawn,          {.v = kicadshowcmd } },
     	{ MODKEY|ShiftMask,             XK_k,      spawn,          {.v = kicadprojectscmd } },
     	{ MODKEY,                       XK_l,      spawn,          {.v = kicadlibcmd } },
     	{ MODKEY|ControlMask,           XK_k,      view,           {.ui = 1 << 16 } },

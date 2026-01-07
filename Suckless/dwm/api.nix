@@ -7,43 +7,85 @@
     /* dwmfifo - control dwm via named pipe */
     static const char *dwmfifo = "/tmp/dwm.fifo";
     static Command commands[] = {
-    	/* standard commands */
-    	{ "term",            spawn,          {.v = termcmd} },
-    	{ "quit",            quit,           {0} },
-    	{ "focusstack",      focusstack,     .parse = parseplusminus },
-    	{ "incnmaster",      incnmaster,     .parse = parseplusminus },
-    	{ "setmfact",        setmfact,       .parse = parseplusminus },
-    	{ "zoom",            zoom,           {0} },
-    	{ "killclient",      killclient,     {0} },
-    	{ "setlayout-tiled", setlayout,      {.v = &layouts[0]} },
-    	{ "setlayout-float", setlayout,      {.v = &layouts[1]} },
-    	{ "setlayout-mono",  setlayout,      {.v = &layouts[2]} },
-    	{ "togglelayout",    setlayout,      {0} },
-    	{ "togglefloating",  togglefloating, {0} },
-    	{ "viewwin",         viewwin,        .parse = parsexid },
-    	{ "viewname",        viewname,       .parse = parsestr },
-    	{ "viewall",         view,           {.ui = ~0} },
-    	{ "focusmon",        focusmon,       .parse = parseplusminus },
-    	{ "tagmon",          tagmon,         .parse = parseplusminus },
-    	{ "view",            view,           .parse = parsetag },
-    	{ "toggleview",      toggleview,     .parse = parsetag },
-    	{ "tag",             tag,            .parse = parsetag },
-    	{ "toggletag",       toggletag,      .parse = parsetag },
-    	/* monitor targeting for scripts */
-    	{ "nthmon0",         focusnthmon,    {.i = 0} },
-    	{ "nthmon1",         focusnthmon,    {.i = 1} },
-    	{ "sendnthmon0",     tagnthmon,      {.i = 0} },
-    	{ "sendnthmon1",     tagnthmon,      {.i = 1} },
-    	/* app spawns */
-    	{ "rofi",            spawn,          {.v = roficmd} },
-    	{ "browser",         spawn,          {.v = browsercmd} },
-    	{ "files",           spawn,          {.v = filescmd} },
-    	{ "editor",          spawn,          {.v = editorcmd} },
-    	/* kicad workflow - tag 16= sch/pcb, tag 17= pm */
-    	{ "kicad-sch",       view,           {.ui = 1 << 15} },
-    	{ "kicad-pcb",       view,           {.ui = 1 << 15} },
-    	{ "kicad-all",       view,           {.ui = 1 << 15} },
-    	{ "kicad-pm",        view,           {.ui = 1 << 16} },
+    	/* ═══════════════════════════════════════════════════════════════════════
+    	 * TAG NAVIGATION - Semantic names matching workflow
+    	 * ═══════════════════════════════════════════════════════════════════════ */
+    	{ "view",           view,           .parse = parsetag },      /* Generic: view 5 */
+    	{ "view-all",       view,           {.ui = ~0} },             /* All tags */
+    	{ "view-prev",      viewprev,       {0} },                    /* Previous tag */
+    	{ "view-next",      viewnext,       {0} },                    /* Next tag */
+
+    	/* Semantic tag shortcuts (matching tags.nix) */
+    	{ "terminal",       view,           {.ui = 1 << 9} },         /* Tag 10: */
+    	{ "files",          view,           {.ui = 1 << 10} },        /* Tag 11: */
+    	{ "video",          view,           {.ui = 1 << 11} },        /* Tag 12: */
+    	{ "browser",        view,           {.ui = 1 << 12} },        /* Tag 13: 󰖟 */
+    	{ "code",           view,           {.ui = 1 << 13} },        /* Tag 14: */
+    	{ "freecad",        view,           {.ui = 1 << 14} },        /* Tag 15: 󰻬 */
+    	{ "kicad",          view,           {.ui = 1 << 15} },        /* Tag 16: (sch/pcb) */
+    	{ "kicad-pm",       view,           {.ui = 1 << 16} },        /* Tag 17: (project manager) */
+
+    	/* ═══════════════════════════════════════════════════════════════════════
+    	 * MONITOR CONTROL - Primary (left) / Secondary (right)
+    	 * ═══════════════════════════════════════════════════════════════════════ */
+    	{ "mon-prim",       focusnthmon,    {.i = 1} },               /* Focus primary monitor */
+    	{ "mon-sec",        focusnthmon,    {.i = 0} },               /* Focus secondary monitor */
+    	{ "mon-send-prim",  tagnthmon,      {.i = 1} },               /* Send window to primary */
+    	{ "mon-send-sec",   tagnthmon,      {.i = 0} },               /* Send window to secondary */
+    	{ "mon-swap",       swapmon,        {0} },                    /* Swap monitor contents */
+
+    	/* ═══════════════════════════════════════════════════════════════════════
+    	 * WINDOW MANAGEMENT
+    	 * ═══════════════════════════════════════════════════════════════════════ */
+    	{ "focus-next",     focusstack,     {.i = +1} },              /* Next window in stack */
+    	{ "focus-prev",     focusstack,     {.i = -1} },              /* Previous window */
+    	{ "focus",          focusstack,     .parse = parseplusminus },/* Generic: focus +2 */
+    	{ "kill",           killclient,     {0} },                    /* Close window */
+    	{ "zoom",           zoom,           {0} },                    /* Promote to master */
+    	{ "float",          togglefloating, {0} },                    /* Toggle floating */
+
+    	/* ═══════════════════════════════════════════════════════════════════════
+    	 * LAYOUT
+    	 * ═══════════════════════════════════════════════════════════════════════ */
+    	{ "layout-tile",    setlayout,      {.v = &layouts[0]} },
+    	{ "layout-float",   setlayout,      {.v = &layouts[1]} },
+    	{ "layout-mono",    setlayout,      {.v = &layouts[2]} },
+    	{ "layout-toggle",  setlayout,      {0} },                    /* Cycle layouts */
+
+    	/* ═══════════════════════════════════════════════════════════════════════
+    	 * MASTER AREA
+    	 * ═══════════════════════════════════════════════════════════════════════ */
+    	{ "master-inc",     incnmaster,     {.i = +1} },
+    	{ "master-dec",     incnmaster,     {.i = -1} },
+    	{ "mfact",          setmfact,       .parse = parseplusminus },/* mfact +0.05 */
+
+    	/* ═══════════════════════════════════════════════════════════════════════
+    	 * TAG MANAGEMENT
+    	 * ═══════════════════════════════════════════════════════════════════════ */
+    	{ "toggleview",     toggleview,     .parse = parsetag },
+    	{ "tag",            tag,            .parse = parsetag },
+    	{ "toggletag",      toggletag,      .parse = parsetag },
+    	{ "tagmon",         tagmon,         .parse = parseplusminus },
+
+    	/* ═══════════════════════════════════════════════════════════════════════
+    	 * ADVANCED (window targeting)
+    	 * ═══════════════════════════════════════════════════════════════════════ */
+    	{ "viewwin",        viewwin,        .parse = parsexid },      /* Focus by X window ID */
+    	{ "viewname",       viewname,       .parse = parsestr },      /* Focus by name */
+
+    	/* ═══════════════════════════════════════════════════════════════════════
+    	 * SPAWNS
+    	 * ═══════════════════════════════════════════════════════════════════════ */
+    	{ "spawn-term",     spawn,          {.v = termcmd} },
+    	{ "spawn-browser",  spawn,          {.v = browsercmd} },
+    	{ "spawn-rofi",     spawn,          {.v = roficmd} },
+    	{ "spawn-files",    spawn,          {.v = filescmd} },
+    	{ "spawn-editor",   spawn,          {.v = editorcmd} },
+
+    	/* ═══════════════════════════════════════════════════════════════════════
+    	 * SESSION
+    	 * ═══════════════════════════════════════════════════════════════════════ */
+    	{ "quit",           quit,           {0} },
     };
   '';
 }

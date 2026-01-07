@@ -78,7 +78,10 @@ in
   environment.systemPackages = [
     (pkgs.writeShellScriptBin "vieworspawn" ''
       mon=$1; tag=$2; class=$3; shift 3
-      echo "nthmon$mon" > /tmp/dwm.fifo
+      # Focus monitor if multi-monitor setup (0=secondary, 1=primary)
+      if [[ $(${pkgs.autorandr}/bin/autorandr --current) != "mobile" ]]; then
+        [[ "$mon" == "0" ]] && echo "mon-sec" > /tmp/dwm.fifo || echo "mon-prim" > /tmp/dwm.fifo
+      fi
       echo "view $tag" > /tmp/dwm.fifo
       sleep 0.02
       if ! ${pkgs.xdotool}/bin/xdotool search --class "$class" >/dev/null 2>&1; then

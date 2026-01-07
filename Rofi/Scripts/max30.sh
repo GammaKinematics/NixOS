@@ -37,8 +37,9 @@ for entry in "${VIDEOS[@]}"; do
         if [[ "$WM" == "hyprland" ]]; then
             hyprctl dispatch workspace 90 >/dev/null 2>&1
         else
-            # dwm: Switch to video tag (tag 14)
-            xdotool key super+m 2>/dev/null || true
+            # Focus primary monitor first if not on mobile (single monitor) profile
+            [[ $(autorandr --current) != "mobile" ]] && echo "mon-prim" > /tmp/dwm.fifo
+            echo "video" > /tmp/dwm.fifo
         fi
         exit 0
     fi

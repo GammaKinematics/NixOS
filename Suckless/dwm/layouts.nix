@@ -15,7 +15,7 @@ let
     0 # tag 8
     0 # tag 9
     2 # tag 10: terminal
-    0 # tag 11: files
+    2 # tag 11: files
     2 # tag 12: video
     2 # tag 13: web/browser
     2 # tag 14: code

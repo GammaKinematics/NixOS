@@ -86,6 +86,7 @@
     extraGroups = [
       "networkmanager"
       "wheel"
+      "input"  # Required for libinput-gestures
     ];
   };
 
