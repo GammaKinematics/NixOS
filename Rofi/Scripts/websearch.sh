@@ -35,7 +35,7 @@ if echo "$QUERY" | grep -qE '\.(com|org|net|io|dev|co|me|gov|edu|app|xyz|info)(/
 fi
 
 # Step 2: Engine selection (DuckDuckGo first)
-ENGINE=$(printf "  DuckDuckGo\n  Google\n  MyNixOS\n  Nixpkgs" | rofi -dmenu -p "Engine :  " -no-custom -l 4)
+ENGINE=$(printf "  DuckDuckGo\n  Google\n  MyNixOS\n  Nixpkgs\n  NerdFonts" | rofi -dmenu -p "Engine :  " -no-custom -l 5)
 [ -z "$ENGINE" ] && exit 0
 
 # Remove icon prefix
@@ -78,5 +78,9 @@ case "$ENGINE" in
     "Nixpkgs")
         switch_to_browser
         xdg-open "https://search.nixos.org/packages?query=$ENCODED"
+        ;;
+    "NerdFonts")
+        switch_to_browser
+        xdg-open "https://www.nerdfonts.com/cheat-sheet?q=$ENCODED"
         ;;
 esac

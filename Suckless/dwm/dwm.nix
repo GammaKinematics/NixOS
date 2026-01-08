@@ -34,13 +34,19 @@
 # 11. accessnthmonitor - Focus/send to specific monitor by number
 # 12. dwmfifo          - Control dwm via named pipe
 # 13. xcursor          - Use system Xcursor theme (Stylix)
+# 14. actualfullscreen
 #
 # Custom additions:
 #   - def_layouts array for per-tag default layouts
 #
 # =============================================================================
 
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   appearance = import ./appearance.nix { inherit config lib; };
@@ -51,28 +57,30 @@ let
   api = import ./api.nix { inherit lib; };
 
   configDefH = ''
-${appearance.config}
+    ${appearance.config}
 
-${tags.config}
+    ${tags.config}
 
-${rules.config}
+    ${rules.config}
 
-${layouts.config}
+    ${layouts.config}
 
-${keybindings.config}
+    ${keybindings.config}
 
-${api.config}
+    ${api.config}
   '';
 in
 {
   services.xserver.windowManager.dwm = {
     enable = true;
-    package = (pkgs.dwm.override {
-      conf = configDefH;
-    }).overrideAttrs (old: {
-      patches = [ ./dwm-lebowski.patch ];
-      buildInputs = old.buildInputs ++ [ pkgs.xorg.libXcursor ];
-    });
+    package =
+      (pkgs.dwm.override {
+        conf = configDefH;
+      }).overrideAttrs
+        (old: {
+          patches = [ ./dwm-lebowski.patch ];
+          buildInputs = old.buildInputs ++ [ pkgs.xorg.libXcursor ];
+        });
   };
 
   environment.systemPackages = [

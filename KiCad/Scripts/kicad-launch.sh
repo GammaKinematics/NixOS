@@ -68,28 +68,36 @@ if [[ "$WM" == "hyprland" ]]; then
 
 else
     # dwm: Launch KiCad, window rules handle placement
-    # Tag 16 = kicad (sch/pcb), Tag 17 = kicad PM
+    # Tag 16 = kicad-pm, Tag 17 = kicad (sch/pcb), Tag 18 = kicad-aux (mobile)
+
+    # Detect profile
+    PROFILE=$(autorandr --current 2>/dev/null || echo "mobile")
 
     # Switch to PM tag and launch
-    echo "mon-sec" > /tmp/dwm.fifo
+    [[ "$PROFILE" != "mobile" ]] && echo "mon-sec" > /tmp/dwm.fifo
     echo "kicad-pm" > /tmp/dwm.fifo
     kicad "$PROJECT" &
 
-    # Wait for PM, focus it, open PCB editor
-    sleep 3
-    xdotool search --name "$PROJECT_NAME" windowactivate --sync
+    # Wait for PM, open PCB editor
+    sleep 1
     sleep 0.25
     xdotool key ctrl+p
 
-    # Wait for PCB Editor, focus it, open Schematic
-    echo "mon-prim" > /tmp/dwm.fifo
+    # Wait for PCB Editor
+    sleep 2
+    [[ "$PROFILE" != "mobile" ]] && echo "mon-prim" > /tmp/dwm.fifo
     echo "kicad" > /tmp/dwm.fifo
-    sleep 3
-    xdotool search --name "PCB Editor" windowactivate --sync
+
+    if [[ "$PROFILE" == "mobile" ]]; then
+        # Mobile: retag PCB to tag 18 (kicad-aux)
+        # PCB landed on tag 17, focus it, retag to 18, follow
+        xdotool search --name "PCB Editor" windowactivate --sync
+        sleep 0.25
+        echo "tag 18" > /tmp/dwm.fifo
+        echo "kicad-aux" > /tmp/dwm.fifo
+    fi
+
+    # Focus PCB Editor, open Schematic
     sleep 0.25
     xdotool key ctrl+e
-
-    # Switch to KiCad work view
-    echo "mon-sec" > /tmp/dwm.fifo
-    echo "kicad" > /tmp/dwm.fifo
 fi

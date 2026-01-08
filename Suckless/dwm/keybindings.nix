@@ -41,12 +41,14 @@
     static const char *filesvos[]   = { "vieworspawn", "0", "11", "Thunar",      "thunar", NULL };
     static const char *editorvos[]  = { "vieworspawn", "1", "14", "dev.zed.Zed", "zeditor", NULL };
     static const char *freecadvos[] = { "vieworspawn", "1", "15", "FreeCAD",     "FreeCAD", "--single-instance", NULL };
+    static const char *bambuvos[]   = { "vieworspawn", "1", "19", "BambuStudio", "bambu-studio", NULL };
 
     /* fallback spawn commands */
     static const char *termcmd[]    = { "st", NULL };
     static const char *filescmd[]   = { "thunar", NULL };
     static const char *editorcmd[]  = { "zeditor", NULL };
     static const char *freecadcmd[] = { "FreeCAD", "--single-instance", NULL };
+    static const char *bambucmd[]   = { "bambu-studio", NULL };
 
     static const Key keys[] = {
     	/* modifier                     key        function        argument */
@@ -81,7 +83,7 @@
     	{ MODKEY,                       XK_k,      spawn,          {.v = kicadshowcmd } },
     	{ MODKEY|ShiftMask,             XK_k,      spawn,          {.v = kicadprojectscmd } },
     	{ MODKEY,                       XK_l,      spawn,          {.v = kicadlibcmd } },
-    	{ MODKEY|ControlMask,           XK_k,      view,           {.ui = 1 << 16 } },
+    	{ MODKEY|ControlMask,           XK_k,      view,           {.ui = 1 << 15 } },
     	{ MODKEY|Mod1Mask,              XK_k,      spawn,          {.v = kicadswapcmd } },
     	{ MODKEY,                       XK_bracketright, spawn,    {.v = kicadcyclefcmd } },
     	{ MODKEY,                       XK_bracketleft,  spawn,    {.v = kicadcyclebcmd } },
@@ -90,9 +92,14 @@
     	{ MODKEY,                       XK_f,      spawn,          {.v = freecadvos } },
     	{ MODKEY|ShiftMask,             XK_f,      spawn,          {.v = freecadcmd } },
 
+      /* Bambu Studio */
+    	{ MODKEY,                       XK_p,      spawn,          {.v = bambuvos } },
+    	{ MODKEY|ShiftMask,             XK_p,      spawn,          {.v = bambucmd } },
+
     	/* Window management */
     	{ MODKEY,                       XK_q,      killclient,     {0} },
     	{ MODKEY,                       XK_e,      togglefloating, {0} },
+    	{ MODKEY,                       XK_w,      togglefullscr,  {0} },
     	{ MODKEY,                       XK_t,      tabmode,        {-1} },
 
     	/* Focus movement - stack */

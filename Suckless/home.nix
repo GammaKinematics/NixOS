@@ -3,13 +3,6 @@
 { pkgs, ... }:
 
 {
-  # Wallpaper management
-  programs.feh = {
-    enable = true;
-    package = pkgs.feh;
-  };
-  stylix.targets.feh.enable = true;
-
   # Monitor management
   programs.autorandr = {
     enable = true;
@@ -75,6 +68,13 @@
     package = pkgs.flameshot;
   };
 
+  # Wallpaper management
+  programs.feh = {
+    enable = true;
+    package = pkgs.feh;
+  };
+  stylix.targets.feh.enable = true;
+
   # Touchpad gestures (for mobile mode)
   home.file.".config/libinput-gestures.conf".text = ''
     # 3-finger up/down: tag navigation
@@ -95,23 +95,23 @@
   '';
 
   # Compositor for transparency
-  services.picom = {
-    enable = true;
-    package = pkgs.picom;
-    backend = "glx";
-    vSync = true;
-    activeOpacity = 0.85;
-    inactiveOpacity = 0.75;
-    menuOpacity = 0.95;
-    opacityRules = [
-      "100:fullscreen"
-      "100:class_g = 'dwm'"
-      "100:window_type = 'dock'"
-    ];
-    settings = {
-      corner-radius = 10;
-    };
-  };
+  # services.picom = {
+  #   enable = true;
+  #   package = pkgs.picom;
+  #   backend = "glx";
+  #   vSync = true;
+  #   activeOpacity = 0.85;
+  #   inactiveOpacity = 0.75;
+  #   menuOpacity = 0.95;
+  #   opacityRules = [
+  #     "100:fullscreen"
+  #     "100:class_g = 'dwm'"
+  #     "100:window_type = 'dock'"
+  #   ];
+  #   settings = {
+  #     corner-radius = 10;
+  #   };
+  # };
 
   # X11 startup script
   home.file.".xinitrc".text = ''
@@ -133,7 +133,7 @@
     slstatus &
 
     # Compositor
-    picom &
+    # picom &
 
     # Touchpad gestures
     libinput-gestures-setup start &

@@ -18,8 +18,10 @@ let
     "󰖟" # 13: web/browser
     "" # 14: code
     "󰻬" # 15: freecad
-    "" # 16: kicad schematic/pcb
-    "" # 17: kicad project manager
+    "" # 16: kicad project manager
+    "" # 17: kicad (sch/pcb editors)
+    "" # 18: kicad-aux (pcb/footprint mobile)
+    "󰹜" # 19: bambu studio
   ];
   tagsStr = lib.concatMapStringsSep ", " (t: ''"${t}"'') tags;
 in

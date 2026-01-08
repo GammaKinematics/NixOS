@@ -20,8 +20,10 @@ let
     2 # tag 13: web/browser
     2 # tag 14: code
     2 # tag 15: freecad
-    2 # tag 16: kicad schematic/pcb
-    2 # tag 17: kicad project manager
+    2 # tag 16: kicad project manager
+    2 # tag 17: kicad (sch/pcb editors)
+    2 # tag 18: kicad-aux (pcb/footprint mobile)
+    2 # tag 19: bambu studio
   ];
   defLayoutsStr = lib.concatMapStringsSep ", " toString defLayouts;
 in

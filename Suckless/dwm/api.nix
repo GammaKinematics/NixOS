@@ -16,14 +16,15 @@
     	{ "view-next",      viewnext,       {0} },                    /* Next tag */
 
     	/* Semantic tag shortcuts (matching tags.nix) */
-    	{ "terminal",       view,           {.ui = 1 << 9} },         /* Tag 10: */
-    	{ "files",          view,           {.ui = 1 << 10} },        /* Tag 11: */
-    	{ "video",          view,           {.ui = 1 << 11} },        /* Tag 12: */
+    	{ "terminal",       view,           {.ui = 1 << 9} },         /* Tag 10:  */
+    	{ "files",          view,           {.ui = 1 << 10} },        /* Tag 11:  */
+    	{ "video",          view,           {.ui = 1 << 11} },        /* Tag 12:  */
     	{ "browser",        view,           {.ui = 1 << 12} },        /* Tag 13: 󰖟 */
-    	{ "code",           view,           {.ui = 1 << 13} },        /* Tag 14: */
+    	{ "code",           view,           {.ui = 1 << 13} },        /* Tag 14:  */
     	{ "freecad",        view,           {.ui = 1 << 14} },        /* Tag 15: 󰻬 */
-    	{ "kicad",          view,           {.ui = 1 << 15} },        /* Tag 16: (sch/pcb) */
-    	{ "kicad-pm",       view,           {.ui = 1 << 16} },        /* Tag 17: (project manager) */
+    	{ "kicad-pm",       view,           {.ui = 1 << 15} },        /* Tag 16:  (project manager) */
+    	{ "kicad",          view,           {.ui = 1 << 16} },        /* Tag 17:  (sch/pcb) */
+      { "kicad-aux",      view,           {.ui = 1 << 17} },        /* Tag 18:  (pcb mobile) */
 
     	/* ═══════════════════════════════════════════════════════════════════════
     	 * MONITOR CONTROL - Primary (left) / Secondary (right)

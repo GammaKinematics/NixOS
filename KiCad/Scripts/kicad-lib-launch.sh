@@ -11,6 +11,7 @@ if [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
     WM="hyprland"
 else
     WM="dwm"
+    PROFILE=$(autorandr --current 2>/dev/null || echo "mobile")
 fi
 
 # ==============================================================================
@@ -28,19 +29,17 @@ if [[ "$WM" == "hyprland" ]]; then
     sleep 0.25
     xdotool key ctrl+i  # Open Symbol Editor from Schematic
 else
-    # Ensure we're on kicad tag on both monitors
-    kicad-show
-
     # Focus PCB Editor, open Footprint Editor
-    sleep 0.5
-    xdotool search --name "PCB Editor" windowactivate --sync
+    [[ "$PROFILE" != "mobile" ]] && echo "mon-prim" > /tmp/dwm.fifo
+    echo "kicad" > /tmp/dwm.fifo
     sleep 0.25
     xdotool key ctrl+u
 
-    sleep 3
+    sleep 0.5
 
     # Focus right monitor, Schematic Editor, open Symbol Editor
-    xdotool search --name "Schematic Editor" windowactivate --sync
+    [[ "$PROFILE" != "mobile" ]] && echo "mon-sec" > /tmp/dwm.fifo
+    echo "kicad" > /tmp/dwm.fifo
     sleep 0.25
     xdotool key ctrl+i
 fi
