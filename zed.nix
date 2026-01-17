@@ -27,6 +27,14 @@
       notification_panel = { button = false; };
       title_bar = { show_sign_in = false; };
 
+      # Hide UI panels
+      diagnostics = { button = false; };
+      debugger = { button = false; };
+
+      # Disable edit predictions completely
+      features = { edit_prediction_provider = "none"; };
+      show_edit_predictions = false;
+
       hour_format = "hour24";
       auto_update = false;
 

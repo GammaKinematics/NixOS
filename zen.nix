@@ -106,7 +106,7 @@
         Downloads = true;
         FormData = true;
         History = false;  # Keep history
-        Sessions = true;  # Don't restore tabs
+        Sessions = false;  # Keep tabs on restart
         SiteSettings = false;
         OfflineApps = true;
         Locked = true;
@@ -180,7 +180,7 @@
     profiles.default = {
       # Zen-specific settings
       settings = {
-        "zen.workspaces.continue-where-left-off" = false;  # Fresh start
+        "zen.workspaces.continue-where-left-off" = true;  # Restore tabs
         "zen.workspaces.natural-scroll" = true;
         "zen.view.compact.hide-tabbar" = true;
         "zen.view.compact.hide-toolbar" = true;
@@ -188,9 +188,9 @@
         "zen.welcome-screen.seen" = true;
         "zen.urlbar.behavior" = "float";
 
-        # Fresh instance - don't restore sessions
-        "browser.startup.page" = 1;  # Open home page, not previous session
-        "browser.sessionstore.resume_from_crash" = false;
+        # Restore previous session
+        "browser.startup.page" = 3;  # Restore previous session
+        "browser.sessionstore.resume_from_crash" = true;
       };
 
       # --- Bookmarks ---
