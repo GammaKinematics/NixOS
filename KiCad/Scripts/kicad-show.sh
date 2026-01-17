@@ -18,7 +18,7 @@ if [[ "$WM" == "hyprland" ]]; then
     hyprctl dispatch workspace 101
     hyprctl dispatch workspace 102
 else
-    if [[ $(autorandr --current) != "mobile" ]]; then
+    if [[ $(autorandr --detected) != "mobile" ]]; then
         # Multi-monitor: set kicad tag on both monitors
         echo "mon-prim" > /tmp/dwm.fifo
         echo "kicad" > /tmp/dwm.fifo

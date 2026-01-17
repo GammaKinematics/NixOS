@@ -9,6 +9,16 @@
     package = pkgs.autorandr;
     hooks.postswitch = {
       "set-xft-dpi" = "echo 'Xft.dpi: 96' | xrdb -merge";
+      "set-wallpaper" = ''
+        case "$AUTORANDR_CURRENT_PROFILE" in
+          docked)
+            xwallpaper --output eDP-1 --zoom ~/NixOS/Wallpapers/pearl.jpg --output DP-3 --zoom ~/NixOS/Wallpapers/siege.png
+            ;;
+          mobile)
+            xwallpaper --output eDP-1 --zoom ~/NixOS/Wallpapers/siege.png
+            ;;
+        esac
+      '';
     };
     profiles = {
       "docked" = {
@@ -42,7 +52,7 @@
       };
       "mobile" = {
         fingerprint = {
-          eDP-1 = "00ffffffffffff002c831207000000001d220104a51e1378025645935e5b9325185054000000010101010101010101010101010101010f3c80a070b0204018303c002ebd10000018000000000000000000000000000000000000000000000000000000000000000000000000000000fe004b443134304e3636333041303100df";
+          eDP-1 = "00ffffffffffff002c831207000000001d220104a51e1378025645935e5b9325185054000000010101010101010101010101010101010f3c80a070b0204018303c002ebd10000018000000000000000000000000000000000000000000000000000000000000000000000000000000fe004b443134304e3336333041303100df";
         };
         config = {
           eDP-1 = {
@@ -68,13 +78,6 @@
     package = pkgs.flameshot;
   };
 
-  # Wallpaper management
-  programs.feh = {
-    enable = true;
-    package = pkgs.feh;
-  };
-  stylix.targets.feh.enable = true;
-
   # Touchpad gestures (for mobile mode)
   home.file.".config/libinput-gestures.conf".text = ''
     # 3-finger up/down: tag navigation
@@ -93,25 +96,6 @@
     gesture pinch in  rofi -show system
     gesture pinch out sh -c 'echo "view-all" > /tmp/dwm.fifo'
   '';
-
-  # Compositor for transparency
-  # services.picom = {
-  #   enable = true;
-  #   package = pkgs.picom;
-  #   backend = "glx";
-  #   vSync = true;
-  #   activeOpacity = 0.85;
-  #   inactiveOpacity = 0.75;
-  #   menuOpacity = 0.95;
-  #   opacityRules = [
-  #     "100:fullscreen"
-  #     "100:class_g = 'dwm'"
-  #     "100:window_type = 'dock'"
-  #   ];
-  #   settings = {
-  #     corner-radius = 10;
-  #   };
-  # };
 
   # X11 startup script
   home.file.".xinitrc".text = ''
@@ -138,11 +122,8 @@
     # Touchpad gestures
     libinput-gestures-setup start &
 
-    # Auto-rotate (only activates in mobile mode)
+    # Auto-rotate
     auto-rotate &
-
-    # Wallpaper (DP-3: norse, eDP-1: pearl)
-    feh --bg-fill ~/NixOS/Wallpapers/pearl.jpg --bg-fill ~/NixOS/Wallpapers/siege.png
 
     # Create dwmfifo for IPC
     mkfifo /tmp/dwm.fifo 2>/dev/null || true

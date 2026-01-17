@@ -11,7 +11,7 @@ if [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
     WM="hyprland"
 else
     WM="dwm"
-    PROFILE=$(autorandr --current 2>/dev/null || echo "mobile")
+    PROFILE=$(autorandr --detected 2>/dev/null || echo "mobile")
 fi
 
 # ==============================================================================

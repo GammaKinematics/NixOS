@@ -16,7 +16,7 @@ switch_to_browser() {
         hyprctl dispatch workspace 70
     else
         # Focus primary monitor first if not on mobile (single monitor) profile
-        [[ $(autorandr --current) != "mobile" ]] && echo "mon-prim" > /tmp/dwm.fifo
+        [[ $(autorandr --detected) != "mobile" ]] && echo "mon-prim" > /tmp/dwm.fifo
         echo "browser" > /tmp/dwm.fifo
     fi
 }

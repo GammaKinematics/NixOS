@@ -99,10 +99,17 @@
         Fingerprinting = true;
       };
 
-      # Clean up on shutdown
+      # Clean up on shutdown (fresh instance)
       SanitizeOnShutdown = {
-        FormData = true;
         Cache = true;
+        Cookies = false;  # Keep logins
+        Downloads = true;
+        FormData = true;
+        History = false;  # Keep history
+        Sessions = true;  # Don't restore tabs
+        SiteSettings = false;
+        OfflineApps = true;
+        Locked = true;
       };
 
       # Extensions
@@ -132,9 +139,6 @@
 
         # --- YouTube ---
         "{762f9885-5a13-4abd-9c77-433dcd38b8fd}" = "return-youtube-dislikes";
-
-        # --- Other ---
-        # "firefox-extension@steamdb.info" = "steam-database";              # Steam enhancements
       };
 
       # Locked preferences
@@ -143,34 +147,50 @@
         "browser.tabs.warnOnClose" = false;
         "media.videocontrols.picture-in-picture.video-toggle.enabled" = true;
 
-        # Privacy hardening
-        "privacy.resistFingerprinting" = true;
-        "privacy.resistFingerprinting.randomization.canvas.use_siphash" = true;
-        "privacy.resistFingerprinting.randomization.daily_reset.enabled" = true;
-        "privacy.resistFingerprinting.randomization.daily_reset.private.enabled" = true;
-        "privacy.resistFingerprinting.block_mozAddonManager" = true;
+        # Translation (auto-translate all languages except en/fr)
+        "browser.translations.enable" = true;
+        "browser.translations.panelShown" = true;
+        "browser.translations.automaticallyPopup" = true;
+        "browser.translations.alwaysTranslateLanguages" = "ar,bg,cs,da,de,el,es,et,fi,hu,id,it,ja,ko,lt,lv,nl,no,pl,pt,ro,ru,sk,sl,sv,th,tr,uk,vi,zh";
+        "browser.translations.neverTranslateLanguages" = "en,fr";
+
+        # Privacy (balanced - removed slow options)
         "privacy.spoof_english" = 1;
-        "privacy.firstparty.isolate" = true;
         "network.cookie.cookieBehavior" = 5;
         "dom.battery.enabled" = false;
 
-        # Performance
+        # Performance & Speed
         "gfx.webrender.all" = true;
+        "layers.acceleration.force-enabled" = true;
         "network.http.http3.enabled" = true;
-        "network.socket.ip_addr_any.disabled" = true;
+        "network.dns.disablePrefetch" = false;
+        "network.prefetch-next" = true;
+        "browser.sessionstore.interval" = 60000;  # Less frequent session saves (60s)
+        "browser.cache.memory.enable" = true;
+        "browser.cache.memory.capacity" = 524288;  # 512MB memory cache
+        "content.notify.interval" = 100000;
+        "ui.submenuDelay" = 0;  # Instant submenus
+
+        # Disable animations for snappiness
+        "toolkit.cosmeticAnimations.enabled" = false;
+        "browser.fullscreen.animate" = false;
       };
     };
 
     profiles.default = {
       # Zen-specific settings
       settings = {
-        "zen.workspaces.continue-where-left-off" = true;
+        "zen.workspaces.continue-where-left-off" = false;  # Fresh start
         "zen.workspaces.natural-scroll" = true;
         "zen.view.compact.hide-tabbar" = true;
         "zen.view.compact.hide-toolbar" = true;
         "zen.view.compact.animate-sidebar" = false;
         "zen.welcome-screen.seen" = true;
         "zen.urlbar.behavior" = "float";
+
+        # Fresh instance - don't restore sessions
+        "browser.startup.page" = 1;  # Open home page, not previous session
+        "browser.sessionstore.resume_from_crash" = false;
       };
 
       # --- Bookmarks ---

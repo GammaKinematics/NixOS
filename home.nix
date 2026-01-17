@@ -1,6 +1,7 @@
 {
   config,
   pkgs-unstable,
+  inputs,
   ...
 }:
 
@@ -13,6 +14,7 @@ in
     ./git.nix
     ./zed.nix
     ./zen.nix
+    ./thorium.nix
     ./Rofi/rofi.nix
     ./KiCad/kicad.nix
     # ./Hyprsuck/home.nix
@@ -36,7 +38,6 @@ in
 
     # Office & Productivity
     libreoffice-fresh
-    keepassxc
 
     # CAD & Manufacturing
     freecad
@@ -84,6 +85,14 @@ in
 
   # --- Bash shell ---
   programs.bash.enable = true;
+
+  # --- KeePassXC ---
+  xdg.autostart.enable = true;
+  programs.keepassxc = {
+    enable = true;
+    package = pkgs-unstable.keepassxc;
+    autostart = true;
+  };
 
   # ============================================================================
   # Disable version check - we intentionally use unstable home-manager with stable nixpkgs

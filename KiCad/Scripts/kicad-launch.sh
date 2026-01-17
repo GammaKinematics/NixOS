@@ -71,7 +71,7 @@ else
     # Tag 16 = kicad-pm, Tag 17 = kicad (sch/pcb), Tag 18 = kicad-aux (mobile)
 
     # Detect profile
-    PROFILE=$(autorandr --current 2>/dev/null || echo "mobile")
+    PROFILE=$(autorandr --detected 2>/dev/null || echo "mobile")
 
     # Switch to PM tag and launch
     [[ "$PROFILE" != "mobile" ]] && echo "mon-sec" > /tmp/dwm.fifo

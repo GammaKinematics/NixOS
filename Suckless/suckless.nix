@@ -31,6 +31,9 @@
   # Input (libinput)
   services.libinput.enable = true;
 
+  # Tablet/stylus support
+  services.xserver.wacom.enable = true;
+
   # Accelerometer for auto-rotation
   hardware.sensor.iio.enable = true;
 
@@ -58,38 +61,45 @@
     # Clipboard
     xclip
 
+    # Wallpaper
+    xwallpaper
+
     # Numlock on startup
     numlockx
 
     # Touchpad gestures
     libinput-gestures
 
-    # Auto-rotate for mobile mode
+    # Auto-rotate based on accelerometer (with wallpaper switching, mobile only)
     (writeShellScriptBin "auto-rotate" ''
-      # Only run in mobile mode
-      [[ $(${autorandr}/bin/autorandr --current) != "mobile" ]] && exit 0
-
       export DISPLAY=''${DISPLAY:-:0}
+      WALLPAPER_DIR="$HOME/NixOS/Wallpapers"
 
       ${iio-sensor-proxy}/bin/monitor-sensor | while read -r line; do
+        # Skip rotation when docked (would mess up monitor positions)
+        [[ $(${autorandr}/bin/autorandr --detected) != "mobile" ]] && continue
+
         case "$line" in
           *"normal"*)
             ${xorg.xrandr}/bin/xrandr --output eDP-1 --rotate normal
+            ${xwallpaper}/bin/xwallpaper --output eDP-1 --zoom "$WALLPAPER_DIR/siege.png"
             ;;
           *"left-up"*)
             ${xorg.xrandr}/bin/xrandr --output eDP-1 --rotate left
+            ${xwallpaper}/bin/xwallpaper --output eDP-1 --zoom "$WALLPAPER_DIR/pearl.jpg"
             ;;
           *"right-up"*)
             ${xorg.xrandr}/bin/xrandr --output eDP-1 --rotate right
+            ${xwallpaper}/bin/xwallpaper --output eDP-1 --zoom "$WALLPAPER_DIR/pearl.jpg"
             ;;
           *"bottom-up"*)
             ${xorg.xrandr}/bin/xrandr --output eDP-1 --rotate inverted
+            ${xwallpaper}/bin/xwallpaper --output eDP-1 --zoom "$WALLPAPER_DIR/siege.png"
             ;;
         esac
       done
     '')
   ];
-
 
   # ============================================================================
   # Polkit authentication agent

@@ -12,7 +12,7 @@
     ./hardware-configuration.nix
     ./stylix.nix
     # ./Hyprsuck/hyprsuck.nix
-    ./Suckless/suckless.nix # Uncomment for dwm (and comment Hyprsuck)
+    ./Suckless/suckless.nix
     ./ryzenadj.nix
     # ./virtualisation.nix
   ];
@@ -28,26 +28,18 @@
     "/share/xdg-desktop-portal"
   ];
 
-  # Bootloader (stable)
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.systemd-boot.configurationLimit = 10;
   boot.loader.timeout = 1;
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "nixos";
 
-  # Enable networking
   networking.networkmanager.enable = true;
-
-  # Enable bluetooth
   hardware.bluetooth.enable = true;
 
-  # Set your time zone.
   time.timeZone = "Asia/Ho_Chi_Minh";
-
-  # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "en_US.UTF-8";
     LC_IDENTIFICATION = "en_US.UTF-8";
@@ -60,16 +52,8 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  # Autologin to TTY (Hyprland started via shell profile with UWSM)
   services.getty.autologinUser = "lebowski";
 
-  # services.displayManager.sddm.enable = true;
-  # services.displayManager.sddm.settings.General.Numlock = "on";
-
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
-  # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -79,21 +63,15 @@
     pulse.enable = true;
   };
 
-  # Define a user account. Don't forget to set a password with 'passwd'.
   users.users.lebowski = {
     isNormalUser = true;
     description = "Antoine Lespinasse";
     extraGroups = [
       "networkmanager"
       "wheel"
-      "input"  # Required for libinput-gestures
+      "input"
     ];
   };
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-  # services.flatpak.enable = true;
 
   # GVfs - for Nautilus trash, network shares, MTP devices
   services.gvfs.enable = true;
@@ -103,12 +81,6 @@
 
   # Power Profiles Daemon - power management (performance/balanced/power-saver)
   services.power-profiles-daemon.enable = true;
-
-  # Enable nix-ld for dynamically linked binaries (e.g., Zed LSP servers)
-  programs.nix-ld.enable = true;
-
-  # Firefox (kept as backup browser, zen-browser is in home-manager)
-  programs.firefox.enable = true;
 
   # System packages (stable for core tools)
   environment.systemPackages = with pkgs; [

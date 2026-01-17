@@ -87,7 +87,7 @@ in
     (pkgs.writeShellScriptBin "vieworspawn" ''
       mon=$1; tag=$2; class=$3; shift 3
       # Focus monitor if multi-monitor setup (0=secondary, 1=primary)
-      if [[ $(${pkgs.autorandr}/bin/autorandr --current) != "mobile" ]]; then
+      if [[ $(${pkgs.autorandr}/bin/autorandr --detected) != "mobile" ]]; then
         [[ "$mon" == "0" ]] && echo "mon-sec" > /tmp/dwm.fifo || echo "mon-prim" > /tmp/dwm.fifo
       fi
       echo "view $tag" > /tmp/dwm.fifo

@@ -29,6 +29,9 @@
       url = "github:nix-community/stylix";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+
+    # Thorium browser (fast Chromium fork)
+    thorium.url = "github:Rishabh5321/thorium_flake";
   };
 
   outputs =

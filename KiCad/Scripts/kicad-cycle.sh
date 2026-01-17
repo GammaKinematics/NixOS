@@ -31,7 +31,7 @@ else
     FOCUS_CMD="focus-next"
     [[ "$DIRECTION" == "b" ]] && FOCUS_CMD="focus-prev"
 
-    if [[ $(autorandr --current) != "mobile" ]]; then
+    if [[ $(autorandr --detected) != "mobile" ]]; then
         # Multi-monitor: cycle on both monitors
         echo "mon-prim" > /tmp/dwm.fifo
         echo "$FOCUS_CMD" > /tmp/dwm.fifo
