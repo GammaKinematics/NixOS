@@ -14,10 +14,13 @@
     	{ "Polkit-gnome-authentication-agent-1", NULL, NULL,    0,            1,           -1 },
     	{ "KeePassXC",        NULL,       NULL,                 0,            1,           -1 },
     	{ NULL,               NULL,       "Picture-in-Picture", 0,            1,           -1 },
+      { "slint-viewer",     NULL,       NULL,                 0,            1,           -1 },
+      { "LVGL Simulator",   NULL,       NULL,                 0,            1,           -1 },
+      { NULL,               NULL,       "Axium Browser",      0,            1,           -1 },
     	{ "st-256color",      NULL,       NULL,                 1 << 9,       0,            0 },  /* terminal */
     	{ "Thunar",           NULL,       NULL,                 1 << 10,      0,            0 },  /* files */
     	{ "haruna",           NULL,       NULL,                 1 << 11,      0,            1 },  /* video */
-    	{ "zen-twilight",     NULL,       NULL,                 1 << 12,      0,            1 },  /* web */
+    	{ "Chromium-browser", NULL,       NULL,                 1 << 12,      0,            1 },  /* web (axium) */
     	{ "dev.zed.Zed",      NULL,       NULL,                 1 << 13,      0,            1 },  /* code */
     	{ "FreeCAD",          NULL,       "Expression editor",  0,            1,           -1 },  /* freecad formula popup */
     	{ "FreeCAD",          NULL,       "Insert length",      0,            1,           -1 },  /* freecad dimension popup */

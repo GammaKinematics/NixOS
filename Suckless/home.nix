@@ -1,12 +1,12 @@
 # Suckless home-manager configuration
 # X11-specific settings that integrate with home-manager
-{ pkgs, ... }:
+{ pkgs-stable, ... }:
 
 {
   # Monitor management
   programs.autorandr = {
     enable = true;
-    package = pkgs.autorandr;
+    package = pkgs-stable.autorandr;
     hooks.postswitch = {
       "set-xft-dpi" = "echo 'Xft.dpi: 96' | xrdb -merge";
       "set-wallpaper" = ''
@@ -69,13 +69,13 @@
   };
   services.autorandr = {
     enable = true;
-    package = pkgs.autorandr;
+    package = pkgs-stable.autorandr;
   };
 
   # Screenshots
   services.flameshot = {
     enable = true;
-    package = pkgs.flameshot;
+    package = pkgs-stable.flameshot;
   };
 
   # Touchpad gestures (for mobile mode)
@@ -124,6 +124,9 @@
 
     # Auto-rotate
     auto-rotate &
+
+    # KeePassXC (minimized, ready for browser extension)
+    keepassxc --minimized &
 
     # Create dwmfifo for IPC
     mkfifo /tmp/dwm.fifo 2>/dev/null || true

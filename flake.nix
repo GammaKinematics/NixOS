@@ -30,8 +30,9 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
-    # Thorium browser (fast Chromium fork)
-    thorium.url = "github:Rishabh5321/thorium_flake";
+    # Axium browser (custom ungoogled-chromium + thorium opts)
+    # Note: Don't use follows - must match exact nixpkgs used when building cache
+    axium.url = "github:GammaKinematics/Axium/main";
   };
 
   outputs =
@@ -46,6 +47,12 @@
     let
       system = "x86_64-linux";
 
+
+      # Stable pkgs for CAD/manufacturing (more reliable builds)
+      pkgs-stable = import nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+      };
 
       # Unstable pkgs for home-manager / desktop / dev
       pkgs-unstable = import nixpkgs-unstable {
@@ -71,7 +78,7 @@
               useGlobalPkgs = false;
               useUserPackages = true;
               extraSpecialArgs = {
-                inherit inputs pkgs-unstable;
+                inherit inputs pkgs-unstable pkgs-stable;
               };
               users.lebowski = import ./home.nix;
               backupFileExtension = "backup";

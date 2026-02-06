@@ -1,8 +1,7 @@
 # Rofi configuration and scripts
 # Works with both Hyprland (Wayland) and dwm (X11)
 {
-  pkgs-unstable,
-  pkgs,
+  pkgs-stable,
   config,
   lib,
   ...
@@ -21,7 +20,7 @@ in
 {
   # Wayland-specific packages (only when using Hyprland)
   home.packages =
-    with pkgs-unstable;
+    with pkgs-stable;
     [
       rofi-bluetooth
       rofi-network-manager
@@ -31,10 +30,10 @@ in
       sqlite
 
       # Custom scripts (environment-aware)
-      (pkgs.writeShellScriptBin "rofi-websearch" (builtins.readFile "${scriptsDir}/websearch.sh"))
-      (pkgs.writeShellScriptBin "rofi-max30" (builtins.readFile "${scriptsDir}/max30.sh"))
-      (pkgs.writeShellScriptBin "rofi-system" (builtins.readFile "${scriptsDir}/system.sh"))
-      (pkgs.writeShellScriptBin "rofi-favorites" (builtins.readFile "${scriptsDir}/favorites.sh"))
+      (writeShellScriptBin "rofi-websearch" (builtins.readFile "${scriptsDir}/websearch.sh"))
+      (writeShellScriptBin "rofi-max30" (builtins.readFile "${scriptsDir}/max30.sh"))
+      (writeShellScriptBin "rofi-system" (builtins.readFile "${scriptsDir}/system.sh"))
+      (writeShellScriptBin "rofi-favorites" (builtins.readFile "${scriptsDir}/favorites.sh"))
     ]
     ++ (
       if isWayland then
@@ -53,10 +52,10 @@ in
 
   programs.rofi = {
     enable = true;
-    package = pkgs-unstable.rofi;
+    package = pkgs-stable.rofi;
     terminal = terminal;
 
-    plugins = with pkgs-unstable; [
+    plugins = with pkgs-stable; [
       rofi-calc
       rofi-emoji
     ];
@@ -140,7 +139,7 @@ in
         window = {
           width = mkLiteral "300px";
           location = mkLiteral "center";
-          border-radius = mkLiteral "12px";
+          # border-radius = mkLiteral "12px";
           border = mkLiteral "2px solid";
           border-color = mkLiteral "@border-color";
         };
@@ -150,11 +149,11 @@ in
         };
         element = {
           padding = mkLiteral "8px";
-          border-radius = mkLiteral "6px";
+          # border-radius = mkLiteral "6px";
         };
-        "element selected" = {
-          border-radius = mkLiteral "6px";
-        };
+        # "element selected" = {
+        #   border-radius = mkLiteral "6px";
+        # };
         inputbar = {
           padding = mkLiteral "8px";
         };

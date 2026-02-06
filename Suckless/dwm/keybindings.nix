@@ -20,7 +20,7 @@
     static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
     static const char *roficmd[]  = { "rofi", "-show", "system", NULL };
     static const char *rofiwebcmd[] = { "rofi-websearch", NULL };
-    static const char *browsercmd[] = { "zen", NULL };
+    static const char *browsercmd[] = { "axium", NULL };
     static const char *lockcmd[] = { "slock", NULL };
     static const char *kicadshowcmd[] = { "kicad-show", NULL };
     static const char *kicadprojectscmd[] = { "kicad-projects", NULL };
@@ -65,7 +65,7 @@
     	{ MODKEY,                       XK_z,      spawn,          {.v = editorvos } },
     	{ MODKEY|ShiftMask,             XK_z,      spawn,          {.v = editorcmd } },
 
-    	/* Zen Browser (web) */
+    	/* Axium Browser (web) */
     	{ MODKEY,                       XK_x,      view,           {.ui = 1 << 12 } },
     	{ MODKEY|ShiftMask,             XK_x,      spawn,          {.v = browsercmd } },
 

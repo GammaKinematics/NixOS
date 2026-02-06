@@ -17,10 +17,38 @@
     # ./virtualisation.nix
   ];
 
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+  nix.package = pkgs.nixVersions.git;
+
+  nix.settings = {
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+    # Axium binary cache
+    substituters = [
+      # "https://mirror.sjtu.edu.cn/nix-channels/store"
+      # "https://mirrors.ustc.edu.cn/nix-channels/store"
+      "https://cache.nixos.org"
+      "https://axium.cachix.org"
+    ];
+
+    http-connections = 128;
+    max-substitution-jobs = 128;
+    max-jobs = "auto";
+
+    trusted-public-keys = [ "axium.cachix.org-1:BfzPfRTbbCYmaQrVLSWchgsR4ScA9ZCZ389FyWspUH8=" ];
+  };
+
+  nix.buildMachines = [{
+    hostName = "192.168.2.65";
+    sshUser = "lebowski";
+    sshKey = "/home/lebowski/.ssh/id_ed25519";
+    system = "x86_64-linux";
+    maxJobs = 2;
+    supportedFeatures = [ "big-parallel" "benchmark" ];
+  }];
+
+  nix.distributedBuilds = true;
 
   # Required for home-manager xdg.portal with useUserPackages
   environment.pathsToLink = [
@@ -56,6 +84,9 @@
 
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
+
+  # Chromium sandbox for Axium
+  # security.chromiumSuidSandbox.enable = true;
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -88,6 +119,7 @@
     git
     bat
     btop
+    ncdu
     neofetch
     xdotool
     jq

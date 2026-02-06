@@ -10,6 +10,8 @@
     # This populates the userSettings "auto_install_extensions"
     extensions = [
       "nix"
+      "odin"
+      "slint"
       "dockerfile"
       "docker-compose"
       "latex"
@@ -20,6 +22,9 @@
 
     # Everything inside of these brackets are Zed options
     userSettings = {
+      # Disable all AI features (including Claude Code ACP agents)
+      disable_ai = true;
+
       # Disable collaboration/AI features
       assistant = { enabled = false; };
       collaboration_panel = { button = false; };
@@ -59,6 +64,9 @@
 
       # Disable all language servers globally
       enable_language_server = false;
+
+      # Disable Claude Code integration (prevents auto-launching claude-code-acp)
+      context_servers = { };
     };
   };
 }

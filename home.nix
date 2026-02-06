@@ -1,6 +1,7 @@
 {
   config,
   pkgs-unstable,
+  pkgs-stable,
   inputs,
   ...
 }:
@@ -14,7 +15,7 @@ in
     ./git.nix
     ./zed.nix
     ./zen.nix
-    ./thorium.nix
+    ./axium.nix
     ./Rofi/rofi.nix
     ./KiCad/kicad.nix
     # ./Hyprsuck/home.nix
@@ -28,9 +29,9 @@ in
   programs.home-manager.enable = true;
 
   # ============================================================================
-  # User Packages (from unstable)
+  # User Packages (stable by default, unstable for bleeding-edge tools)
   # ============================================================================
-  home.packages = with pkgs-unstable; [
+  home.packages = with pkgs-stable; [
     # Media & Creative
     haruna
     krita
@@ -43,15 +44,16 @@ in
     freecad
     bambu-studio
 
-    # Dev tools
-    claude-code
+    # Dev tools (unstable for latest features)
+    pkgs-unstable.claude-code
+    pkgs-unstable.hcloud
   ];
 
   # ============================================================================
   # GTK Icon Theme
   # ============================================================================
   gtk.iconTheme = {
-    package = pkgs-unstable.papirus-icon-theme;
+    package = pkgs-stable.papirus-icon-theme;
     name = "Papirus-Dark";
   };
 
@@ -60,7 +62,7 @@ in
   # ============================================================================
   services.dunst = {
     enable = true;
-    package = pkgs-unstable.dunst;
+    package = pkgs-stable.dunst;
     settings.global.timeout = 3;
   };
 
@@ -84,15 +86,25 @@ in
   # ============================================================================
 
   # --- Bash shell ---
-  programs.bash.enable = true;
+  programs.bash = {
+    enable = true;
+    package = pkgs-stable.bash;
+  };
 
   # --- KeePassXC ---
-  xdg.autostart.enable = true;
   programs.keepassxc = {
     enable = true;
-    package = pkgs-unstable.keepassxc;
-    autostart = true;
+    package = pkgs-stable.keepassxc;
   };
+
+  # --- Chromium (ungoogled) ---
+  # programs.chromium = {
+  #   enable = true;
+  #   package = pkgs-unstable.ungoogled-chromium;
+  #   extensions = [
+  #     { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; }  # uBlock Origin
+  #   ];
+  # };
 
   # ============================================================================
   # Disable version check - we intentionally use unstable home-manager with stable nixpkgs
