@@ -11,11 +11,16 @@ let
 in
 
 {
+  # Fix home-manager xresources bug: pkgs.xrdb doesn't exist, should be xorg.xrdb
+  nixpkgs.overlays = [ (final: prev: { xrdb = prev.xorg.xrdb; }) ];
+
+  # Disable xresources - Stylix enables it by default but we don't need it (ST uses compile-time colors)
+  stylix.targets.xresources.enable = false;
+
   imports = [
     ./git.nix
     ./zed.nix
     ./zen.nix
-    ./axium.nix
     ./Rofi/rofi.nix
     ./KiCad/kicad.nix
     # ./Hyprsuck/home.nix
@@ -97,14 +102,10 @@ in
     package = pkgs-stable.keepassxc;
   };
 
-  # --- Chromium (ungoogled) ---
-  # programs.chromium = {
-  #   enable = true;
-  #   package = pkgs-unstable.ungoogled-chromium;
-  #   extensions = [
-  #     { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; }  # uBlock Origin
-  #   ];
-  # };
+  programs.foliate = {
+    enable = true;
+    package = pkgs-stable.foliate;
+  };
 
   # ============================================================================
   # Disable version check - we intentionally use unstable home-manager with stable nixpkgs

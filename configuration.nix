@@ -1,7 +1,3 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running 'nixos-help').
-
 {
   pkgs,
   ...
@@ -17,8 +13,6 @@
     # ./virtualisation.nix
   ];
 
-  nix.package = pkgs.nixVersions.git;
-
   nix.settings = {
     experimental-features = [
       "nix-command"
@@ -26,8 +20,6 @@
     ];
     # Axium binary cache
     substituters = [
-      # "https://mirror.sjtu.edu.cn/nix-channels/store"
-      # "https://mirrors.ustc.edu.cn/nix-channels/store"
       "https://cache.nixos.org"
       "https://axium.cachix.org"
     ];
@@ -40,7 +32,7 @@
   };
 
   nix.buildMachines = [{
-    hostName = "192.168.2.65";
+    hostName = "192.168.2.121";
     sshUser = "lebowski";
     sshKey = "/home/lebowski/.ssh/id_ed25519";
     system = "x86_64-linux";
@@ -85,8 +77,6 @@
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
 
-  # Chromium sandbox for Axium
-  # security.chromiumSuidSandbox.enable = true;
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -120,6 +110,7 @@
     bat
     btop
     ncdu
+    nmap
     neofetch
     xdotool
     jq

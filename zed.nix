@@ -11,6 +11,7 @@
     extensions = [
       "nix"
       "odin"
+      "astro"
       "slint"
       "dockerfile"
       "docker-compose"

@@ -16,7 +16,7 @@
 
     # Zen Browser
     zen-browser = {
-      url = "github:0xc000022070/zen-browser-flake";
+      url = "github:0xc000022070/zen-browser-flake/0fac05e4b604c3304e7710a95572e78350fe9968";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
       inputs.home-manager.follows = "home-manager";
     };
@@ -29,10 +29,6 @@
       url = "github:nix-community/stylix";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-
-    # Axium browser (custom ungoogled-chromium + thorium opts)
-    # Note: Don't use follows - must match exact nixpkgs used when building cache
-    axium.url = "github:GammaKinematics/Axium/main";
   };
 
   outputs =
